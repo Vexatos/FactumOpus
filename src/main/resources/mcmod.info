@@ -1,0 +1,17 @@
+[
+{
+  "modid": "FactumOpus",
+  "name": "Factum Opus",
+  "description": "A Factorization addon.",
+  "version": "${version}",
+  "credits": "",
+  "logoFile": "",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [ "Vexatos" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": []
+}
+]
