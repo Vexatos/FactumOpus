@@ -12,7 +12,7 @@ import vexatos.factumopus.reference.Mods;
  * @author Vexatos
  */
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
-	dependencies = "required-after:" + Mods.Factorization)
+	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,)")
 public class FactumOpus {
 
 	@Instance(Mods.FactumOpus)
