@@ -31,14 +31,12 @@ public class StripesHandlerVoidFumes implements IStripesHandler {
 		return stack.getItem() == Items.glass_bottle;
 	}
 
-	private static final ItemStack voidbottle = new ItemStack(FactumOpus.itemBottleVoidFumes, 1, 0);
-
 	@Override
 	@Optional.Method(modid = Mods.API.BuildCraftTransport)
 	public boolean handle(World world, int x, int y, int z, ForgeDirection direction, ItemStack stack, EntityPlayer player, IStripesActivator activator) {
 		Block block = world.getBlock(x, y, z);
 		if(y < 5 && block == Blocks.air) {
-			activator.sendItem(voidbottle.copy(), direction.getOpposite());
+			activator.sendItem(new ItemStack(FactumOpus.itemBottles, 1, 0), direction.getOpposite());
 			stack.stackSize--;
 			if(stack.stackSize > 0) {
 				activator.sendItem(stack, direction.getOpposite());

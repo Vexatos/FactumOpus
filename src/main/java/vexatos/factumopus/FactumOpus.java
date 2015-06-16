@@ -25,7 +25,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vexatos.factumopus.block.BlockFluidVoidGoo;
+import vexatos.factumopus.block.BlockSolidVoidGoo;
 import vexatos.factumopus.fluid.FluidContainerHandler;
+import vexatos.factumopus.integration.ModRecipes;
 import vexatos.factumopus.integration.botany.IntegrationBotany;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;
 import vexatos.factumopus.integration.extrabees.IntegrationExtraBees;
@@ -63,12 +65,13 @@ public class FactumOpus {
 	public static Item itemMaterial;
 	public static Item itemAcidBottles;
 	public static Item itemBucketVoidGoo;
-	public static Item itemBottleVoidFumes;
+	public static Item itemBottles;
 	public static Item itemSulfurTrioxide;
 	public static Item itemSalts;
 
 	public static Block pondBase;
-	public static Block blockVoidGoo;
+	public static BlockFluidVoidGoo blockVoidGooFluid;
+	public static Block blockVoidGooSolid;
 
 	public static Fluid voidfumes;
 	public static Fluid voidessence;
@@ -78,7 +81,7 @@ public class FactumOpus {
 	public void preInit(FMLPreInitializationEvent e) {
 		log = LogManager.getLogger(Mods.FactumOpus);
 
-		itemBowls = new ItemMultiple("dark_iron_bowl", "iron_bowl", "salt_bowl", "sulfur_trioxide_bottle")
+		itemBowls = new ItemMultiple("dark_iron_bowl", "iron_bowl", "salt_bowl")
 			.setMaxStackSize(16);
 		GameRegistry.registerItem(itemBowls, "factumopus.itemBowls");
 		itemMaterial = new ItemMultiple("void_goo_glob", "salt_pile");
@@ -87,9 +90,6 @@ public class FactumOpus {
 		itemAcidBottles = new ItemAcidBottles();
 		GameRegistry.registerItem(itemAcidBottles, "factumopus.itemAcidBottles");
 
-		itemSulfurTrioxide = new ItemSulfurTrioxide();
-		GameRegistry.registerItem(itemSulfurTrioxide, "factumopus.itemSulfurTrioxide");
-
 		itemSalts = new ItemLikeBonemeal(
 			"potassium_bisulfate", "potassium_pyrosulfate",
 			"potassium_sulfate", "potassium_bisulfate_powder", "potassium_sulfate_powder",
@@ -97,16 +97,24 @@ public class FactumOpus {
 			"sodium_sulfate", "sodium_bisulfate_powder", "sodium_sulfate_powder").setBonemeal(2, 7);
 		GameRegistry.registerItem(itemSalts, "factumopus.itemSalts");
 
+		blockVoidGooSolid = new BlockSolidVoidGoo();
+		GameRegistry.registerBlock(blockVoidGooSolid, ItemBlockFactumOpus.class, "factumopus.blockSolidVoidGoo");
+
 		fluidContainerHandler = new FluidContainerHandler();
 
-		itemBottleVoidFumes = new ItemMultiple("void_bottle")
+		itemBottles = new ItemMultiple("void_bottle", "sulfur_trioxide_bottle")
 			.setMaxStackSize(16).setContainerItem(Items.glass_bottle);
-		GameRegistry.registerItem(itemBottleVoidFumes, "factumopus.itemBottle");
+		GameRegistry.registerItem(itemBottles, "factumopus.itemBottle");
 
+		itemSulfurTrioxide = new ItemSulfurTrioxide();
+		GameRegistry.registerItem(itemSulfurTrioxide, "factumopus.itemSulfurTrioxide");
+
+		// Void fumes
 		voidfumes = new Fluid("voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
 		FluidRegistry.registerFluid(voidfumes);
-		FluidContainerRegistry.registerFluidContainer(voidfumes, new ItemStack(itemBottleVoidFumes, 1, 0), new ItemStack(Items.glass_bottle));
+		FluidContainerRegistry.registerFluidContainer(voidfumes, new ItemStack(itemBottles, 1, 0), new ItemStack(Items.glass_bottle));
 
+		// Void Essence
 		voidessence = new Fluid("voidessence").setGaseous(true);
 		FluidRegistry.registerFluid(voidessence);
 
@@ -114,14 +122,14 @@ public class FactumOpus {
 		voidgoo = new Fluid("voidgoo").setDensity(10000).setViscosity(10000);
 		FluidRegistry.registerFluid(voidgoo);
 
-		blockVoidGoo = new BlockFluidVoidGoo(voidgoo);
-		GameRegistry.registerBlock(blockVoidGoo, ItemBlockFactumOpus.class, "factumopus.blockFluidVoidGoo");
+		blockVoidGooFluid = new BlockFluidVoidGoo(voidgoo);
+		GameRegistry.registerBlock(blockVoidGooFluid, ItemBlockFactumOpus.class, "factumopus.blockFluidVoidGoo");
 
-		itemBucketVoidGoo = new ItemBucketFactumOpus(blockVoidGoo)
-			.setUnlocalizedName("void_goo_bucket").setContainerItem(Items.bucket);
+		itemBucketVoidGoo = new ItemBucketFactumOpus(blockVoidGooFluid)
+			.setUnlocalizedName("factumopus.void_goo_bucket").setContainerItem(Items.bucket);
 		GameRegistry.registerItem(itemBucketVoidGoo, "factumopus.itemBucket");
 
-		fluidContainerHandler.buckets.put(blockVoidGoo, itemBucketVoidGoo);
+		fluidContainerHandler.buckets.put(blockVoidGooFluid, itemBucketVoidGoo);
 		FluidContainerRegistry.registerFluidContainer(voidgoo,
 			new ItemStack(itemBucketVoidGoo), new ItemStack(Items.bucket));
 
@@ -137,9 +145,13 @@ public class FactumOpus {
 
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
+
+		ModRecipes.registerRecipes();
+
 		if(Mods.isLoaded(Mods.Forestry) && Mods.isLoaded(Mods.ExtraBees) && extraBees != null) {
 			extraBees.init();
 		}
+
 		if(Mods.isLoaded(Mods.Botany)) {
 			botany = new IntegrationBotany();
 			botany.init();
@@ -174,7 +186,7 @@ public class FactumOpus {
 	@SideOnly(Side.CLIENT)
 	public void assignTextures(TextureStitchEvent.Post event) {
 		if(voidgoo != null) {
-			voidgoo.setIcons(blockVoidGoo.getBlockTextureFromSide(1), blockVoidGoo.getBlockTextureFromSide(2));
+			voidgoo.setIcons(blockVoidGooFluid.getBlockTextureFromSide(1), blockVoidGooFluid.getBlockTextureFromSide(2));
 		}
 	}
 }

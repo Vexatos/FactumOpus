@@ -49,10 +49,25 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entity) {
 		super.onEntityItemUpdate(entity);
-		if(!entity.worldObj.isRemote && shouldExplode(entity)) {
-			entity.setDead();
-			entity.worldObj.createExplosion(entity, entity.posX, entity.posY, entity.posZ, 3F, true);
-			return true;
+		if(!entity.worldObj.isRemote) {
+			if(entity.worldObj.getTotalWorldTime() % 10 == 0) {
+				BiomeGenBase biome = entity.worldObj.getBiomeGenForCoords(((int) entity.posX), ((int) entity.posZ));
+				if(biome != null && biome.temperature > 0.3f) {
+					ItemStack stack = entity.getEntityItem();
+					if(stack != null) {
+						--stack.stackSize;
+						if(stack.stackSize <= 0) {
+							entity.setDead();
+							return true;
+						}
+					}
+				}
+			}
+			if(shouldExplode(entity)) {
+				entity.setDead();
+				entity.worldObj.createExplosion(entity, entity.posX, entity.posY, entity.posZ, 3F, true);
+				return true;
+			}
 		}
 		return false;
 	}

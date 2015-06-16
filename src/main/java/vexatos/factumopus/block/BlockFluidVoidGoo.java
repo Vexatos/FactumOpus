@@ -9,19 +9,21 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidFinite;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import vexatos.factumopus.FactumOpus;
+import vexatos.factumopus.tile.TileFluidVoidGoo;
 
 /**
  * @author Vexatos
  */
-public class BlockFluidVoidGoo extends BlockFluidFinite {
+public class BlockFluidVoidGoo extends BlockFluidClassic {
 
 	public static final Material voidgooMaterial = new MaterialLiquid(MapColor.purpleColor);
 	public static final DamageSource damageVoidGoo = new DamageSourceVoidGoo();
@@ -33,6 +35,7 @@ public class BlockFluidVoidGoo extends BlockFluidFinite {
 		super(fluid, voidgooMaterial);
 		this.setDensity(fluid.getDensity());
 		this.setBlockTextureName("factumopus:void_goo_fluid");
+		this.setQuantaPerBlock(5);
 	}
 
 	@Override
@@ -54,6 +57,19 @@ public class BlockFluidVoidGoo extends BlockFluidFinite {
 		};
 
 		FactumOpus.setFluidTextures(r);
+	}
+
+	@Override
+	public boolean hasTileEntity(int metadata) {
+		return metadata == 0;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, int metadata) {
+		if(metadata == 0) {
+			return new TileFluidVoidGoo();
+		}
+		return super.createTileEntity(world, metadata);
 	}
 
 	@Override

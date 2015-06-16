@@ -1,14 +1,20 @@
 package vexatos.factumopus.fluid;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.IFluidBlock;
+import vexatos.factumopus.FactumOpus;
+import vexatos.factumopus.util.RayTracer;
 
 import java.util.HashMap;
 
@@ -47,8 +53,31 @@ public class FluidContainerHandler {
 		e.setResult(Event.Result.ALLOW);
 	}
 
-	/*@SubscribeEvent
-	public void onRightClick() {
-		// TODO Make Bottles work
-	}*/
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if(event.world != null && !event.world.isRemote && event.action == Action.RIGHT_CLICK_AIR) {
+			ItemStack heldStack = event.entityPlayer.getCurrentEquippedItem();
+
+			if(heldStack != null && heldStack.getItem() == Items.glass_bottle && event.y < 5) {
+				MovingObjectPosition pos = RayTracer.raytraceFromPlayer(event.world, event.entityPlayer, false);
+
+				if(pos == null) {
+					if(!event.world.isRemote) {
+						ItemStack newStack = new ItemStack(FactumOpus.itemBottles, 1, 0);
+
+						if(!event.entityPlayer.inventory.addItemStackToInventory(newStack)) {
+							event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
+						}
+
+						--heldStack.stackSize;
+						if(heldStack.stackSize == 0) {
+							event.entityPlayer.inventory.setInventorySlotContents(event.entityPlayer.inventory.currentItem, null);
+						}
+					} else {
+						event.entityPlayer.swingItem();
+					}
+				}
+			}
+		}
+	}
 }
