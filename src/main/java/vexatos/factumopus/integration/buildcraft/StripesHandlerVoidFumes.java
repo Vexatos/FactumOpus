@@ -31,7 +31,7 @@ public class StripesHandlerVoidFumes implements IStripesHandler {
 		return stack.getItem() == Items.glass_bottle;
 	}
 
-	private static final ItemStack voidbottle = new ItemStack(FactumOpus.itemBowls, 1, 3);
+	private static final ItemStack voidbottle = new ItemStack(FactumOpus.itemBottleVoidFumes, 1, 0);
 
 	@Override
 	@Optional.Method(modid = Mods.API.BuildCraftTransport)

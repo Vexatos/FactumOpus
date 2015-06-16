@@ -3,9 +3,13 @@ package vexatos.factumopus.item;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -25,13 +29,21 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 	}
 
 	@Override
-	public boolean hasCustomEntity(ItemStack stack) {
-		return super.hasCustomEntity(stack);
-	}
-
-	@Override
-	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-		return super.createEntity(world, location, itemstack);
+	public void onUpdate(ItemStack stack, World world, Entity entity, int inventoryIndex, boolean isHeld) {
+		if(!world.isRemote && world.getTotalWorldTime() % 10 == 0) {
+			BiomeGenBase biome = world.getBiomeGenForCoords(((int) entity.posX), ((int) entity.posZ));
+			if(biome != null && biome.temperature > 0.3f) {
+				entity.attackEntityFrom(sulfurWarmer, 1.0f);
+				--stack.stackSize;
+				if(stack.stackSize <= 0) {
+					if(entity instanceof EntityPlayer) {
+						((EntityPlayer) entity).inventory.setInventorySlotContents(inventoryIndex, null);
+					} else if(entity instanceof IInventory) {
+						((IInventory) entity).setInventorySlotContents(inventoryIndex, null);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -73,5 +85,16 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 			}
 		}
 		return false;
+	}
+
+	public static DamageSource sulfurWarmer = new SulfurTrioxideDamage();
+
+	public static class SulfurTrioxideDamage extends DamageSource {
+
+		public SulfurTrioxideDamage() {
+			super("factumopus.sulfurTrioxide");
+			this.setDamageBypassesArmor();
+			this.setDamageIsAbsolute();
+		}
 	}
 }

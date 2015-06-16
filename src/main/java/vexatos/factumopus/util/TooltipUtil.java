@@ -1,5 +1,7 @@
 package vexatos.factumopus.util;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import factorization.shared.Core;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,6 +17,7 @@ public class TooltipUtil {
 	private static final int maxWidth = 220;
 
 	@SuppressWarnings("unchecked")
+	@SideOnly(Side.CLIENT)
 	public static void addShiftTooltip(ItemStack stack, List tooltip) {
 		FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 		final String key = stack.getUnlocalizedName() + ".tip";

@@ -47,8 +47,8 @@ public class FluidContainerHandler {
 		e.setResult(Event.Result.ALLOW);
 	}
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void onRightClick() {
 		// TODO Make Bottles work
-	}
+	}*/
 }

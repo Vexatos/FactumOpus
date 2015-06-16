@@ -48,8 +48,11 @@ public class BlockFluidVoidGoo extends BlockFluidFinite {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister r) {
-		icons[0] = r.registerIcon("factumopus:void_goo_fluid");
-		icons[1] = r.registerIcon("factumopus:void_goo_fluid_flow");
+		icons = new IIcon[] {
+			r.registerIcon("factumopus:void_goo_fluid"),
+			r.registerIcon("factumopus:void_goo_fluid_flow")
+		};
+
 		FactumOpus.setFluidTextures(r);
 	}
 
@@ -115,7 +118,7 @@ public class BlockFluidVoidGoo extends BlockFluidFinite {
 		return !world.getBlock(x, y, z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z);
 	}
 
-	private static class DamageSourceVoidGoo extends DamageSource {
+	public static class DamageSourceVoidGoo extends DamageSource {
 
 		public DamageSourceVoidGoo() {
 			super("factumopus.void_goo");
