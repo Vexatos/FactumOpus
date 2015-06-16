@@ -20,11 +20,13 @@ public class Mods {
 
 	public static final String
 		Botany = "Botany",
+		ExtraBees = "ExtraBees",
 		Factorization = "factorization",
 		Forestry = "Forestry";
 
 	//Other APIs
 	public static class API {
+
 		public static final String
 			BuildCraftTransport = "BuildCraftAPI|transport";
 

@@ -7,21 +7,21 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import vexatos.factumopus.reference.Mods;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ItemMultiple extends ItemFactumOpus {
 
-	protected final String mod;
+	protected static final String mod = Mods.FactumOpus.toLowerCase(Locale.ENGLISH);
 	protected final String[] parts;
 	protected final IIcon[] partIcons;
 
-	public ItemMultiple(String mod, String[] parts) {
+	public ItemMultiple(String... parts) {
 		super();
-		this.mod = mod;
 		this.parts = parts;
 		this.partIcons = new IIcon[parts.length];
-		this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
@@ -51,7 +51,7 @@ public class ItemMultiple extends ItemFactumOpus {
 		if(stack == null) {
 			return "item.factumopus.unknown";
 		} else {
-			return "item." + this.mod + "." + this.parts[stack.getItemDamage() % parts.length];
+			return "item." + mod + "." + this.parts[stack.getItemDamage() % parts.length];
 		}
 	}
 

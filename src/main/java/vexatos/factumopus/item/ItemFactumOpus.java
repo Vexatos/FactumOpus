@@ -5,11 +5,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import vexatos.factumopus.FactumOpus;
 import vexatos.factumopus.util.TooltipUtil;
 
 import java.util.List;
 
 public class ItemFactumOpus extends Item {
+
+	public ItemFactumOpus() {
+		this.setCreativeTab(FactumOpus.tab);
+	}
 
 	//Mostly stolen from Sangar
 	@Override
