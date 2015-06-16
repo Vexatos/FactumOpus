@@ -1,0 +1,41 @@
+# Factum Opus lang file
+tile.factumopus.claysand.name=Clayey Sand
+tile.factumopus.pondbase.name=Salination Pond Base
+tile.factumopus.brine.name=Brine
+tile.factumopus.salt.name=Layer of Salt
+tile.factumopus.voidgoofluid.name=Viscous Void Goo
+tile.factumopus.voidgoosolid.name=Block of Void Goo
+tile.factumopus.compressorwall.name=Compressor Tank Wall
+tile.factumopus.compressorvalve.name=Compressor Tank Valve
+tile.factumopus.compressor.name=Air Compressor
+
+fluid.voidfumes=Void Fumes
+fluid.voidessence=Void Essence
+fluid.voidgoo=Void Goo
+
+for.factumopus.bees.species.saline=Saline
+
+item.factumopus.voidpiece.name=Small Glob of Void Goo
+item.factumopus.saltbowl.name=Bowl of Salt
+item.factumopus.saltpile.name=Small Pile of Salt
+item.factumopus.saltcomb.name=Saline Comb
+item.factumopus.ironbowl.name=Bowl of Dissolved Iron
+item.factumopus.darkironbowl.name=Bowl of Purple Dissolved Iron
+
+item.factumopus.bottle_voidfumes.name=Bottle of Void Fumes
+item.factumopus.bottle_nitricacid.name=Bottle of Nitric Acid
+item.factumopus.bottle_hydrochloricacid.name=Bottle of Hydrochloric Acid
+item.factumopus.bottle_aquaregiavera.name=Aqua Regia Vera
+item.factumopus.bottle_sulfurtrioxide.name=Bottle of Sulfur Trioxide
+
+item.factumopus.potassium_bisulfate=Potassium Bisulfate
+item.factumopus.sodium_bisulfate=Sodium Bisulfate
+item.factumopus.potassium_pyrosulfate=Lump of Potassium Pyrosulfate
+item.factumopus.sodium_pyrosulfate=Lump of Sodium Pyrosulfate
+item.factumopus.potassium_sulfate=Pile of Potassium Sulfate
+item.factumopus.sodium_sulfate=Pile of Sodium Sulfate
+item.factumopus.sulfur_trioxide=Solidified Sulfur Trioxide
+
+item.factumopus.unknown.name=Unknowm Item
+
+tooltip.factumopus.too_long=Hold Shift for a detailed tooltip.
