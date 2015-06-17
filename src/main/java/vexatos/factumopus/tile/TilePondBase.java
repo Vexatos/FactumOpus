@@ -83,9 +83,9 @@ public class TilePondBase extends TileEntity {
 		}
 		Block block = world.getBlock(x, y, z);
 		if(block == Blocks.water && world.getBlockMetadata(x, y, z) == 0) {
-			return !isInvalidOnAnySide(world, x, y, z);
+			return !isInvalidOnAnySide(world, x, y, z, block);
 		} else if(block instanceof BlockBrine && ((BlockBrine) block).isSourceBlock(world, x, y, z)) {
-			return !isInvalidOnAnySide(world, x, y, z);
+			return !isInvalidOnAnySide(world, x, y, z, block);
 		}
 		return false;
 	}
@@ -100,21 +100,20 @@ public class TilePondBase extends TileEntity {
 			&& (biome instanceof BiomeGenDesert || (!world.isRaining() && !world.isThundering()));
 	}
 
-	public static boolean isInvalidOnAnySide(World world, int x, int y, int z) {
-		return isInvalidBlock(world, x - 1, y, z)
-			|| isInvalidBlock(world, x + 1, y, z)
-			|| isInvalidBlock(world, x, y, z - 1)
-			|| isInvalidBlock(world, x, y, z + 1);
+	public static boolean isInvalidOnAnySide(World world, int x, int y, int z, Block ownBlock) {
+		return isInvalidBlock(world, x - 1, y, z, ownBlock)
+			|| isInvalidBlock(world, x + 1, y, z, ownBlock)
+			|| isInvalidBlock(world, x, y, z - 1, ownBlock)
+			|| isInvalidBlock(world, x, y, z + 1, ownBlock);
 	}
 
-	public static boolean isInvalidBlock(World world, int x, int y, int z) {
+	public static boolean isInvalidBlock(World world, int x, int y, int z, Block ownBlock) {
 		if(world.blockExists(x, y, z)) {
 			Block block = world.getBlock(x, y, z);
-			if(block instanceof BlockBrine
-				&& !((BlockBrine) block).isSourceBlock(world, x, y, z)) {
-				return true;
-			}
-			if(block == Blocks.water && world.getBlockMetadata(x, y, z) != 0) {
+			if((block instanceof BlockBrine && !((BlockBrine) block).isSourceBlock(world, x, y, z))
+				|| (block == Blocks.water && world.getBlockMetadata(x, y, z) != 0)
+				|| (ownBlock instanceof BlockBrine && block == Blocks.water)
+				|| (ownBlock == FactumOpus.blockBrineSaturated && block == FactumOpus.blockBrine)) {
 				return true;
 			}
 		}

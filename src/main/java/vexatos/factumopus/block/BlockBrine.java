@@ -3,6 +3,8 @@ package vexatos.factumopus.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
@@ -20,7 +22,8 @@ public class BlockBrine extends BlockFluidClassic {
 	public static final MaterialLiquid brineMaterial = new MaterialBrine();
 
 	public BlockBrine(Fluid fluid) {
-		super(fluid, brineMaterial);
+		// TODO Resolve this
+		super(fluid, Material.water);
 		this.setDensity(fluid.getDensity());
 		this.setBlockTextureName("factumopus:brine_still");
 		this.setBlockName("factumopus.brine");
@@ -45,8 +48,8 @@ public class BlockBrine extends BlockFluidClassic {
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-		return super.shouldSideBeRendered(world, x, y, z, side);
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int meta) {
+		return super.isBlockSolid(world, x, y, z, meta);
 	}
 
 	@Override
@@ -80,5 +83,10 @@ public class BlockBrine extends BlockFluidClassic {
 	@Override
 	public int getRenderType() {
 		return renderType;
+	}
+
+	@Override
+	public MapColor getMapColor(int meta) {
+		return brineMaterial.getMaterialMapColor();
 	}
 }
