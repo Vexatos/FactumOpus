@@ -21,11 +21,11 @@ import java.util.HashMap;
 /**
  * @author Vexatos
  */
-public class FluidContainerHandler {
+public class ContainerHandler {
 
 	public HashMap<Block, Item> buckets = new HashMap<Block, Item>();
 
-	private static boolean isFluidBlock(World world, int x, int y, int z) {
+	private static boolean isFluidSourceBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		if(block instanceof IFluidBlock) {
 			return ((IFluidBlock) block).canDrain(world, x, y, z);
@@ -42,7 +42,7 @@ public class FluidContainerHandler {
 
 		Item bucket = buckets.get(block);
 		ItemStack result;
-		if(bucket != null && isFluidBlock(world, target.blockX, target.blockY, target.blockZ)) {
+		if(bucket != null && isFluidSourceBlock(world, target.blockX, target.blockY, target.blockZ)) {
 			world.setBlockToAir(target.blockX, target.blockY, target.blockZ);
 			result = new ItemStack(bucket);
 		} else {
@@ -55,29 +55,29 @@ public class FluidContainerHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(event.world != null && !event.world.isRemote && event.action == Action.RIGHT_CLICK_AIR) {
+		if(event.world != null && event.action == Action.RIGHT_CLICK_AIR) {
 			ItemStack heldStack = event.entityPlayer.getCurrentEquippedItem();
 
-			if(heldStack != null && heldStack.getItem() == Items.glass_bottle && event.y < 5) {
+			if(heldStack != null && heldStack.getItem() == Items.glass_bottle && event.entityPlayer.posY < 5) {
 				MovingObjectPosition pos = RayTracer.raytraceFromPlayer(event.world, event.entityPlayer, false);
 
 				if(pos == null) {
-					if(!event.world.isRemote) {
-						ItemStack newStack = new ItemStack(FactumOpus.itemBottles, 1, 0);
+					ItemStack newStack = new ItemStack(FactumOpus.itemBottles, 1, 0);
 
-						if(!event.entityPlayer.inventory.addItemStackToInventory(newStack)) {
-							event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
-						}
+					if(!event.entityPlayer.inventory.addItemStackToInventory(newStack)) {
+						event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
+					}
 
-						--heldStack.stackSize;
-						if(heldStack.stackSize == 0) {
-							event.entityPlayer.inventory.setInventorySlotContents(event.entityPlayer.inventory.currentItem, null);
-						}
-					} else {
+					--heldStack.stackSize;
+					if(heldStack.stackSize == 0) {
+						event.entityPlayer.inventory.setInventorySlotContents(event.entityPlayer.inventory.currentItem, null);
+					}
+					if(event.world.isRemote) {
 						event.entityPlayer.swingItem();
 					}
 				}
 			}
+			//TODO make bowls work
 		}
 	}
 }

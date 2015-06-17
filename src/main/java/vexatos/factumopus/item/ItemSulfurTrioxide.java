@@ -30,7 +30,7 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int inventoryIndex, boolean isHeld) {
-		if(!world.isRemote && world.getTotalWorldTime() % 10 == 0) {
+		if(!world.isRemote && world.getTotalWorldTime() % 10 == entity.hashCode() % 10) {
 			BiomeGenBase biome = world.getBiomeGenForCoords(((int) entity.posX), ((int) entity.posZ));
 			if(biome != null && biome.temperature > 0.3f) {
 				entity.attackEntityFrom(sulfurWarmer, 1.0f);
@@ -50,7 +50,7 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 	public boolean onEntityItemUpdate(EntityItem entity) {
 		super.onEntityItemUpdate(entity);
 		if(!entity.worldObj.isRemote) {
-			if(entity.worldObj.getTotalWorldTime() % 10 == 0) {
+			if(entity.worldObj.getTotalWorldTime() % 10 == entity.hashCode() % 10) {
 				BiomeGenBase biome = entity.worldObj.getBiomeGenForCoords(((int) entity.posX), ((int) entity.posZ));
 				if(biome != null && biome.temperature > 0.3f) {
 					ItemStack stack = entity.getEntityItem();
@@ -65,7 +65,10 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 			}
 			if(shouldExplode(entity)) {
 				entity.setDead();
-				entity.worldObj.createExplosion(entity, entity.posX, entity.posY, entity.posZ, 3F, true);
+				entity.worldObj.createExplosion(entity, entity.posX, entity.posY, entity.posZ,
+					entity.getEntityItem() != null ?
+						entity.getEntityItem().stackSize >= 60 ? 5F :
+							entity.getEntityItem().stackSize >= 32 ? 4F : 3F : 2F, true);
 				return true;
 			}
 		}

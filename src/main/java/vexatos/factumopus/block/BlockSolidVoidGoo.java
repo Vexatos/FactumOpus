@@ -1,7 +1,10 @@
 package vexatos.factumopus.block;
 
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import vexatos.factumopus.FactumOpus;
+import vexatos.factumopus.misc.material.MaterialFactumOpus;
 
 import java.util.Random;
 
@@ -10,12 +13,16 @@ import java.util.Random;
  */
 public class BlockSolidVoidGoo extends BlockFactumOpus {
 
+	public static final Material voidgooSolidMaterial = new MaterialFactumOpus(MapColor.purpleColor).setRequiresTool();
+
 	public BlockSolidVoidGoo() {
-		super(BlockFluidVoidGoo.voidgooMaterial);
+		super(voidgooSolidMaterial);
 		this.setHarvestLevel("shovel", 2);
 		this.setResistance(2000.0F);
 		this.setHardness(12f);
 		this.setStepSound(slimeySound);
+		this.setBlockTextureName("factumopus:void_goo");
+		this.setBlockName("factumopus.void_goo_solid");
 	}
 
 	@Override
@@ -29,8 +36,13 @@ public class BlockSolidVoidGoo extends BlockFactumOpus {
 	}
 
 	@Override
-	public int quantityDropped(Random p_149745_1_) {
-		return 4;
+	public int quantityDropped(Random rand) {
+		return 12;
+	}
+
+	@Override
+	public int quantityDroppedWithBonus(int meta, Random rand) {
+		return quantityDropped(rand) + rand.nextInt(5);
 	}
 
 	protected static final SlimeySound slimeySound = new SlimeySound();

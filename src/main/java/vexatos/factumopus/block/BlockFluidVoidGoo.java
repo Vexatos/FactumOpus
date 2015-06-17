@@ -2,6 +2,7 @@ package vexatos.factumopus.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
@@ -9,6 +10,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -17,8 +21,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.oredict.OreDictionary;
 import vexatos.factumopus.FactumOpus;
 import vexatos.factumopus.tile.TileFluidVoidGoo;
+
+import java.util.ArrayList;
 
 /**
  * @author Vexatos
@@ -35,12 +42,8 @@ public class BlockFluidVoidGoo extends BlockFluidClassic {
 		super(fluid, voidgooMaterial);
 		this.setDensity(fluid.getDensity());
 		this.setBlockTextureName("factumopus:void_goo_fluid");
+		this.setBlockName("factumopus.void_goo_fluid");
 		this.setQuantaPerBlock(5);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "tile.factumopus.void_goo_fluid";
 	}
 
 	@Override
@@ -70,6 +73,66 @@ public class BlockFluidVoidGoo extends BlockFluidClassic {
 			return new TileFluidVoidGoo();
 		}
 		return super.createTileEntity(world, metadata);
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		super.onBlockAdded(world, x, y, z);
+		this.onConditionsChanged(world, x, y, z, world.getBlockMetadata(x, y, z));
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		super.onNeighborBlockChange(world, x, y, z, block);
+		this.onConditionsChanged(world, x, y, z, world.getBlockMetadata(x, y, z));
+	}
+
+	private void onConditionsChanged(World world, int x, int y, int z, int meta) {
+		if(world.isRemote || meta != 0) {
+			return;
+		}
+		if(world.blockExists(x, y - 1, z)
+			&& isGlowstone(world.getBlock(x, y - 1, z), x, y - 1, z)
+			&& !isMoving(world, x, y, z)) {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if(tile instanceof TileFluidVoidGoo) {
+				((TileFluidVoidGoo) tile).setActive(true);
+			}
+		}
+	}
+
+	public static boolean isGlowstone(Block block, int x, int y, int z) {
+		if(block == null || block == Blocks.air) {
+			return false;
+		}
+		if(block == Blocks.glowstone) {
+			return true;
+		}
+		ArrayList<ItemStack> glowstoneTypes = OreDictionary.getOres("glowstone");
+		for(ItemStack type : glowstoneTypes) {
+			if(type.getItem() instanceof ItemBlock && ((ItemBlock) type.getItem()).field_150939_a == block) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isMoving(World world, int x, int y, int z) {
+		return isNonSourceVoidGooFluidBlock(world, x - 1, y, z)
+			|| isNonSourceVoidGooFluidBlock(world, x + 1, y, z)
+			|| isNonSourceVoidGooFluidBlock(world, x, y, z - 1)
+			|| isNonSourceVoidGooFluidBlock(world, x, y, z + 1);
+	}
+
+	public static boolean isNonSourceVoidGooFluidBlock(World world, int x, int y, int z) {
+		if(world.blockExists(x, y, z)) {
+			Block block = world.getBlock(x, y, z);
+			if(block instanceof BlockFluidVoidGoo
+				&& !((BlockFluidVoidGoo) block).isSourceBlock(world, x, y, z)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

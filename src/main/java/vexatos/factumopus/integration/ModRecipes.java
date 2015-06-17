@@ -3,6 +3,7 @@ package vexatos.factumopus.integration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import vexatos.factumopus.FactumOpus;
 
 /**
@@ -38,5 +39,6 @@ public class ModRecipes {
 		GameRegistry.addSmelting(new ItemStack(FactumOpus.itemSalts, 1, 6),
 			new ItemStack(FactumOpus.itemSalts, 1, 7), 0.1F);
 
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(FactumOpus.clayeySand), "sand", Items.clay_ball));
 	}
 }

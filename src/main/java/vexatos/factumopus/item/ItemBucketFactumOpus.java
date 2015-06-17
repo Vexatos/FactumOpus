@@ -27,7 +27,7 @@ public class ItemBucketFactumOpus extends ItemBucket {
 	@Override
 	public Item setUnlocalizedName(String name) {
 		this.setTextureName("factumopus:" + name);
-		return super.setUnlocalizedName(name);
+		return super.setUnlocalizedName("factumopus." + name);
 	}
 
 	@Override

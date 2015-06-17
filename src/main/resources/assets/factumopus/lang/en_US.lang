@@ -10,8 +10,8 @@ death.attack.factumopus.sulfurTrioxide.player=%1$s fought against %2$s but forgo
 
 tile.factumopus.clayey_sand.name=Clayey Sand
 tile.factumopus.clayey_sand.tip=Place it in a hot area and wait until it hardens.
-tile.factumopus.pondbase.name=Salination Pond Base
-tile.factumopus.pondbase.tip=Place it in a hot area and water on top to slowly turn it into salt.
+tile.factumopus.pond_base.name=Salination Pond Base
+tile.factumopus.pond_base.tip=Place it in a hot area and water on top to make it slowly turn into salt.
 tile.factumopus.brine.name=Brine
 tile.factumopus.brine.tip=It's not quite salt, but it isn't quite water either... What could it be?
 tile.factumopus.salt.name=Layer of Salt
@@ -37,6 +37,8 @@ for.factumopus.flowers.sea=Sea
 
 item.factumopus.void_goo_glob.name=Small Glob of Void Goo
 item.factumopus.void_goo_glob.tip=It looks... strange.
+item.factumopus.brine_bucket.name=Bucket of Brine
+item.factumopus.brine_bucket.tip=It's quite salty.
 item.factumopus.void_goo_bucket.name=Bucket of Void Goo
 item.factumopus.void_goo_bucket.tip=The extremely dangerous substance inside this bucket seems to absorb your life force. Better don't touch it.\nIf you place a glowstone block below it and let it rest, it may solidify.
 item.factumopus.salt_bowl.name=Bowl of Salt

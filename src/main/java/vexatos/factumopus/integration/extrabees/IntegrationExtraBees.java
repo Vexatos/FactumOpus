@@ -11,7 +11,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IMutation;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.genetics.AlleleFlowers;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.BiomeDictionary;
 import vexatos.factumopus.FactumOpus;
@@ -57,10 +56,10 @@ public class IntegrationExtraBees {
 			.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP).setHasEffect();
 		mutationSalty = new MutationReqResNoRain(AlleleManager.alleleRegistry.getAllele(speciesMineral),
 			AlleleManager.alleleRegistry.getAllele(speciesStone), getSaltyTemplate(), 10,
-			new ItemStack(/*TODO FactumOpus.pondBase*/Blocks.dirt, 1, 0));
+			new ItemStack(FactumOpus.pondBase, 1, 0));
 		mutationSaline = new MutationReqResNoRain(speciesSalty,
 			AlleleManager.alleleRegistry.getAllele(speciesOcean), getSalineTemplate(), 10,
-			new ItemStack(/*TODO FactumOpus.pondBase*/Blocks.dirt, 1, 0))
+			new ItemStack(FactumOpus.pondBase, 1, 0))
 			.requireNoRain()
 			.restrictBiomeType(BiomeDictionary.Type.OCEAN).enableStrictBiomeCheck().requireDay().setTemperature(0.5f, 1.0f);
 

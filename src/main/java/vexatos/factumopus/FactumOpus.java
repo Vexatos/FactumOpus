@@ -24,9 +24,13 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import vexatos.factumopus.block.BlockBrine;
+import vexatos.factumopus.block.BlockClaySand;
 import vexatos.factumopus.block.BlockFluidVoidGoo;
+import vexatos.factumopus.block.BlockPondBase;
+import vexatos.factumopus.block.BlockSaltLayer;
 import vexatos.factumopus.block.BlockSolidVoidGoo;
-import vexatos.factumopus.fluid.FluidContainerHandler;
+import vexatos.factumopus.fluid.ContainerHandler;
 import vexatos.factumopus.integration.ModRecipes;
 import vexatos.factumopus.integration.botany.IntegrationBotany;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;
@@ -39,6 +43,9 @@ import vexatos.factumopus.item.ItemSulfurTrioxide;
 import vexatos.factumopus.item.block.ItemBlockFactumOpus;
 import vexatos.factumopus.misc.CreativeTabFactumOpus;
 import vexatos.factumopus.reference.Mods;
+import vexatos.factumopus.tile.TileClaySand;
+import vexatos.factumopus.tile.TileFluidVoidGoo;
+import vexatos.factumopus.tile.TilePondBase;
 
 /**
  * @author Vexatos
@@ -56,7 +63,7 @@ public class FactumOpus {
 
 	public static CreativeTabFactumOpus tab = new CreativeTabFactumOpus();
 
-	public static FluidContainerHandler fluidContainerHandler;
+	public static ContainerHandler containerHandler;
 
 	public static IntegrationExtraBees extraBees;
 	public static IntegrationBotany botany;
@@ -65,14 +72,19 @@ public class FactumOpus {
 	public static Item itemMaterial;
 	public static Item itemAcidBottles;
 	public static Item itemBucketVoidGoo;
+	public static Item itemBucketBrine;
 	public static Item itemBottles;
 	public static Item itemSulfurTrioxide;
 	public static Item itemSalts;
 
+	public static Block clayeySand;
 	public static Block pondBase;
+	public static Block blockBrine;
+	public static Block saltLayer;
 	public static BlockFluidVoidGoo blockVoidGooFluid;
 	public static Block blockVoidGooSolid;
 
+	public static Fluid brine;
 	public static Fluid voidfumes;
 	public static Fluid voidessence;
 	public static Fluid voidgoo;
@@ -100,7 +112,7 @@ public class FactumOpus {
 		blockVoidGooSolid = new BlockSolidVoidGoo();
 		GameRegistry.registerBlock(blockVoidGooSolid, ItemBlockFactumOpus.class, "factumopus.blockSolidVoidGoo");
 
-		fluidContainerHandler = new FluidContainerHandler();
+		containerHandler = new ContainerHandler();
 
 		itemBottles = new ItemMultiple("void_bottle", "sulfur_trioxide_bottle")
 			.setMaxStackSize(16).setContainerItem(Items.glass_bottle);
@@ -109,27 +121,49 @@ public class FactumOpus {
 		itemSulfurTrioxide = new ItemSulfurTrioxide();
 		GameRegistry.registerItem(itemSulfurTrioxide, "factumopus.itemSulfurTrioxide");
 
+		// Salt production
+		clayeySand = new BlockClaySand();
+		GameRegistry.registerBlock(clayeySand, ItemBlockFactumOpus.class, "factumopus.blockClayeySand");
+		GameRegistry.registerTileEntity(TileClaySand.class, "factumopus.blockClayeySand");
+		pondBase = new BlockPondBase();
+		GameRegistry.registerBlock(pondBase, ItemBlockFactumOpus.class, "factumopus.blockPondBase");
+		GameRegistry.registerTileEntity(TilePondBase.class, "factumopus.blockPondBase");
+		saltLayer = new BlockSaltLayer();
+		GameRegistry.registerBlock(saltLayer, ItemBlockFactumOpus.class, "factumopus.blockSaltLayer");
+		brine = new Fluid("factumopus:brine");
+		FluidRegistry.registerFluid(brine);
+		blockBrine = new BlockBrine(brine);
+		GameRegistry.registerBlock(blockBrine, ItemBlockFactumOpus.class, "factumopus.blockBrine");
+		itemBucketBrine = new ItemBucketFactumOpus(blockBrine)
+			.setUnlocalizedName("brine_bucket").setContainerItem(Items.bucket);
+		GameRegistry.registerItem(itemBucketBrine, "factumopus.itemBucketBrine");
+
+		containerHandler.buckets.put(blockBrine, itemBucketBrine);
+		FluidContainerRegistry.registerFluidContainer(brine,
+			new ItemStack(itemBucketBrine), new ItemStack(Items.bucket));
+
 		// Void fumes
-		voidfumes = new Fluid("voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
+		voidfumes = new Fluid("factumopus:voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
 		FluidRegistry.registerFluid(voidfumes);
 		FluidContainerRegistry.registerFluidContainer(voidfumes, new ItemStack(itemBottles, 1, 0), new ItemStack(Items.glass_bottle));
 
 		// Void Essence
-		voidessence = new Fluid("voidessence").setGaseous(true);
+		voidessence = new Fluid("factumopus:voidessence").setGaseous(true);
 		FluidRegistry.registerFluid(voidessence);
 
 		// Void Goo
-		voidgoo = new Fluid("voidgoo").setDensity(10000).setViscosity(10000);
+		voidgoo = new Fluid("factumopus:voidgoo").setDensity(10000).setViscosity(10000);
 		FluidRegistry.registerFluid(voidgoo);
 
 		blockVoidGooFluid = new BlockFluidVoidGoo(voidgoo);
 		GameRegistry.registerBlock(blockVoidGooFluid, ItemBlockFactumOpus.class, "factumopus.blockFluidVoidGoo");
+		GameRegistry.registerTileEntity(TileFluidVoidGoo.class, "factumopus.blockFluidVoidGoo");
 
 		itemBucketVoidGoo = new ItemBucketFactumOpus(blockVoidGooFluid)
-			.setUnlocalizedName("factumopus.void_goo_bucket").setContainerItem(Items.bucket);
-		GameRegistry.registerItem(itemBucketVoidGoo, "factumopus.itemBucket");
+			.setUnlocalizedName("void_goo_bucket").setContainerItem(Items.bucket);
+		GameRegistry.registerItem(itemBucketVoidGoo, "factumopus.itemBucketVoidGoo");
 
-		fluidContainerHandler.buckets.put(blockVoidGooFluid, itemBucketVoidGoo);
+		containerHandler.buckets.put(blockVoidGooFluid, itemBucketVoidGoo);
 		FluidContainerRegistry.registerFluidContainer(voidgoo,
 			new ItemStack(itemBucketVoidGoo), new ItemStack(Items.bucket));
 
@@ -140,7 +174,7 @@ public class FactumOpus {
 		}
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(fluidContainerHandler);
+		MinecraftForge.EVENT_BUS.register(containerHandler);
 	}
 
 	@EventHandler
