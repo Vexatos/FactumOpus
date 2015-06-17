@@ -9,10 +9,12 @@ import net.minecraftforge.fluids.Fluid;
 /**
  * @author Vexatos
  */
-public class BlockBrineSmall extends BlockBrine {
+public class BlockBrineSaturated extends BlockBrine {
 
-	public BlockBrineSmall(Fluid fluid) {
+	public BlockBrineSaturated(Fluid fluid) {
 		super(fluid);
+		this.setBlockTextureName("factumopus:brine_small_still");
+		this.setBlockName("factumopus.brine_saturated");
 	}
 
 	@Override
@@ -30,7 +32,7 @@ public class BlockBrineSmall extends BlockBrine {
 	}
 
 	@Override
-	public int getMaxRenderHeightMeta() {
-		return 4;
+	public float getRenderDivisor() {
+		return 3;
 	}
 }

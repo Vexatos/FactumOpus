@@ -2,24 +2,29 @@ package vexatos.factumopus.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidFinite;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import vexatos.factumopus.misc.material.MaterialBrine;
 
 /**
  * @author Vexatos
  */
-public class BlockBrine extends BlockFluidFinite {
+public class BlockBrine extends BlockFluidClassic {
+
+	public static final MaterialLiquid brineMaterial = new MaterialBrine();
 
 	public BlockBrine(Fluid fluid) {
-		super(fluid, Material.water);
+		super(fluid, brineMaterial);
 		this.setDensity(fluid.getDensity());
 		this.setBlockTextureName("factumopus:brine_still");
 		this.setBlockName("factumopus.brine");
+		renderType = super.getRenderType();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -40,12 +45,40 @@ public class BlockBrine extends BlockFluidFinite {
 	}
 
 	@Override
+	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+		return super.shouldSideBeRendered(world, x, y, z, side);
+	}
+
+	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-		return !world.getBlock(x, y, z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z);
+		Block block = world.getBlock(x, y, z);
+		return block != null
+			&& !block.getMaterial().isLiquid()
+			&& !(block instanceof BlockSaltLayer)
+			&& super.canDisplace(world, x, y, z);
 	}
 
 	@Override
 	public boolean displaceIfPossible(World world, int x, int y, int z) {
-		return !world.getBlock(x, y, z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z);
+		Block block = world.getBlock(x, y, z);
+		return block != null
+			&& !block.getMaterial().isLiquid()
+			&& !(block instanceof BlockSaltLayer)
+			&& super.displaceIfPossible(world, x, y, z);
+	}
+
+	public float getRenderDivisor() {
+		return 1.5f;
+	}
+
+	protected int renderType;
+
+	public void setRenderType(int renderType) {
+		this.renderType = renderType;
+	}
+
+	@Override
+	public int getRenderType() {
+		return renderType;
 	}
 }

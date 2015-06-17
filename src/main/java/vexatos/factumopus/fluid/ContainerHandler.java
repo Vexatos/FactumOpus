@@ -64,20 +64,20 @@ public class ContainerHandler {
 				if(pos == null) {
 					ItemStack newStack = new ItemStack(FactumOpus.itemBottles, 1, 0);
 
-					if(!event.entityPlayer.inventory.addItemStackToInventory(newStack)) {
-						event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
-					}
-
 					--heldStack.stackSize;
 					if(heldStack.stackSize == 0) {
 						event.entityPlayer.inventory.setInventorySlotContents(event.entityPlayer.inventory.currentItem, null);
 					}
+
+					if(!event.entityPlayer.inventory.addItemStackToInventory(newStack)) {
+						event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
+					}
+
 					if(event.world.isRemote) {
 						event.entityPlayer.swingItem();
 					}
 				}
 			}
-			//TODO make bowls work
 		}
 	}
 }

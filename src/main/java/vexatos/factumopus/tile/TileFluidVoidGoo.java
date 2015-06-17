@@ -40,6 +40,9 @@ public class TileFluidVoidGoo extends TileEntity {
 					if(counter >= 150) {
 						if(worldObj.rand.nextInt(100) < percentage) {
 							worldObj.setBlock(xCoord, yCoord, zCoord, FactumOpus.blockVoidGooSolid);
+							counter = 0;
+							percentage = 0;
+							active = false;
 						} else {
 							percentage++;
 						}

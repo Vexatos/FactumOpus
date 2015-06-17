@@ -43,6 +43,9 @@ public class TileClaySand extends TileEntity {
 			if(counter >= 7200) {
 				if(worldObj.rand.nextInt(100) < percentage) {
 					worldObj.setBlock(xCoord, yCoord, zCoord, FactumOpus.pondBase);
+					counter = 0;
+					percentage = 0;
+					active = false;
 				} else {
 					percentage++;
 				}

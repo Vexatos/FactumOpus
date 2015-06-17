@@ -5,6 +5,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -25,6 +26,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vexatos.factumopus.block.BlockBrine;
+import vexatos.factumopus.block.BlockBrineSaturated;
 import vexatos.factumopus.block.BlockClaySand;
 import vexatos.factumopus.block.BlockFluidVoidGoo;
 import vexatos.factumopus.block.BlockPondBase;
@@ -59,6 +61,12 @@ public class FactumOpus {
 	@Instance(Mods.FactumOpus)
 	public static FactumOpus instance;
 
+	@SidedProxy(
+		clientSide = "vexatos.factumopus.ClientProxy",
+		serverSide = "vexatos.factumopus.CommonProxy"
+	)
+	public static CommonProxy proxy;
+
 	public static Logger log;
 
 	public static CreativeTabFactumOpus tab = new CreativeTabFactumOpus();
@@ -73,18 +81,21 @@ public class FactumOpus {
 	public static Item itemAcidBottles;
 	public static Item itemBucketVoidGoo;
 	public static Item itemBucketBrine;
+	public static Item itemBucketBrineSaturated;
 	public static Item itemBottles;
 	public static Item itemSulfurTrioxide;
 	public static Item itemSalts;
 
 	public static Block clayeySand;
 	public static Block pondBase;
-	public static Block blockBrine;
+	public static BlockBrine blockBrine;
+	public static BlockBrine blockBrineSaturated;
 	public static Block saltLayer;
 	public static BlockFluidVoidGoo blockVoidGooFluid;
 	public static Block blockVoidGooSolid;
 
 	public static Fluid brine;
+	public static Fluid brineSaturated;
 	public static Fluid voidfumes;
 	public static Fluid voidessence;
 	public static Fluid voidgoo;
@@ -130,7 +141,8 @@ public class FactumOpus {
 		GameRegistry.registerTileEntity(TilePondBase.class, "factumopus.blockPondBase");
 		saltLayer = new BlockSaltLayer();
 		GameRegistry.registerBlock(saltLayer, ItemBlockFactumOpus.class, "factumopus.blockSaltLayer");
-		brine = new Fluid("factumopus:brine");
+
+		brine = new Fluid("factumopus.brine").setDensity(1200);
 		FluidRegistry.registerFluid(brine);
 		blockBrine = new BlockBrine(brine);
 		GameRegistry.registerBlock(blockBrine, ItemBlockFactumOpus.class, "factumopus.blockBrine");
@@ -142,17 +154,29 @@ public class FactumOpus {
 		FluidContainerRegistry.registerFluidContainer(brine,
 			new ItemStack(itemBucketBrine), new ItemStack(Items.bucket));
 
+		brineSaturated = new Fluid("factumopus.saturatedBrine").setDensity(1400);
+		FluidRegistry.registerFluid(brineSaturated);
+		blockBrineSaturated = new BlockBrineSaturated(brineSaturated);
+		GameRegistry.registerBlock(blockBrineSaturated, ItemBlockFactumOpus.class, "factumopus.blockBrineSaturated");
+		itemBucketBrineSaturated = new ItemBucketFactumOpus(blockBrineSaturated)
+			.setUnlocalizedName("brine_bucket_saturated").setContainerItem(Items.bucket);
+		GameRegistry.registerItem(itemBucketBrineSaturated, "factumopus.itemBucketBrineSaturated");
+
+		containerHandler.buckets.put(blockBrineSaturated, itemBucketBrineSaturated);
+		FluidContainerRegistry.registerFluidContainer(brineSaturated,
+			new ItemStack(itemBucketBrineSaturated), new ItemStack(Items.bucket));
+
 		// Void fumes
-		voidfumes = new Fluid("factumopus:voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
+		voidfumes = new Fluid("factumopus.voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
 		FluidRegistry.registerFluid(voidfumes);
 		FluidContainerRegistry.registerFluidContainer(voidfumes, new ItemStack(itemBottles, 1, 0), new ItemStack(Items.glass_bottle));
 
 		// Void Essence
-		voidessence = new Fluid("factumopus:voidessence").setGaseous(true);
+		voidessence = new Fluid("factumopus.voidessence").setGaseous(true);
 		FluidRegistry.registerFluid(voidessence);
 
 		// Void Goo
-		voidgoo = new Fluid("factumopus:voidgoo").setDensity(10000).setViscosity(10000);
+		voidgoo = new Fluid("factumopus.voidgoo").setDensity(10000).setViscosity(10000);
 		FluidRegistry.registerFluid(voidgoo);
 
 		blockVoidGooFluid = new BlockFluidVoidGoo(voidgoo);
@@ -193,6 +217,8 @@ public class FactumOpus {
 		if(Mods.API.hasAPI(Mods.API.BuildCraftTransport)) {
 			registerStripesHandlers();
 		}
+
+		proxy.registerRenderers();
 	}
 
 	@Optional.Method(modid = Mods.API.BuildCraftTransport)
@@ -221,6 +247,12 @@ public class FactumOpus {
 	public void assignTextures(TextureStitchEvent.Post event) {
 		if(voidgoo != null) {
 			voidgoo.setIcons(blockVoidGooFluid.getBlockTextureFromSide(1), blockVoidGooFluid.getBlockTextureFromSide(2));
+		}
+		if(brine != null) {
+			brine.setIcons(blockBrine.getBlockTextureFromSide(1), blockBrine.getBlockTextureFromSide(2));
+		}
+		if(brineSaturated != null) {
+			brineSaturated.setIcons(blockBrineSaturated.getBlockTextureFromSide(1), blockBrineSaturated.getBlockTextureFromSide(2));
 		}
 	}
 }
