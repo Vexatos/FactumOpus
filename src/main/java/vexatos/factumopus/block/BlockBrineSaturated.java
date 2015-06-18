@@ -15,6 +15,7 @@ public class BlockBrineSaturated extends BlockBrine {
 		super(fluid);
 		this.setBlockTextureName("factumopus:brine_small_still");
 		this.setBlockName("factumopus.brine_saturated");
+		this.setLightOpacity(4);
 	}
 
 	@Override
@@ -33,6 +34,6 @@ public class BlockBrineSaturated extends BlockBrine {
 
 	@Override
 	public float getRenderDivisor() {
-		return 3;
+		return 3.0f;
 	}
 }

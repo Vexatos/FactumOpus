@@ -35,6 +35,7 @@ import vexatos.factumopus.block.BlockSolidVoidGoo;
 import vexatos.factumopus.fluid.ContainerHandler;
 import vexatos.factumopus.integration.ModRecipes;
 import vexatos.factumopus.integration.botany.IntegrationBotany;
+import vexatos.factumopus.integration.buildcraft.StripesHandlerSaltBowl;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;
 import vexatos.factumopus.integration.extrabees.IntegrationExtraBees;
 import vexatos.factumopus.item.ItemAcidBottles;
@@ -154,7 +155,7 @@ public class FactumOpus {
 		FluidContainerRegistry.registerFluidContainer(brine,
 			new ItemStack(itemBucketBrine), new ItemStack(Items.bucket));
 
-		brineSaturated = new Fluid("factumopus.saturatedBrine").setDensity(1400);
+		brineSaturated = new Fluid("factumopus.saturated_brine").setDensity(1400);
 		FluidRegistry.registerFluid(brineSaturated);
 		blockBrineSaturated = new BlockBrineSaturated(brineSaturated);
 		GameRegistry.registerBlock(blockBrineSaturated, ItemBlockFactumOpus.class, "factumopus.blockBrineSaturated");
@@ -225,6 +226,7 @@ public class FactumOpus {
 	private void registerStripesHandlers() {
 		log.info("Registering BuildCraft Stripes Pipe Handlers...");
 		PipeManager.registerStripesHandler(new StripesHandlerVoidFumes(), 5);
+		PipeManager.registerStripesHandler(new StripesHandlerSaltBowl(), 5);
 	}
 
 	@EventHandler

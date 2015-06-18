@@ -59,7 +59,7 @@ public class TileClaySand extends TileEntity {
 			&& !(biome.temperature <= 0.95f || biome.rainfall > 0.2f)
 			&& worldObj.isDaytime()
 			&& (!worldObj.provider.hasNoSky)
-			&& worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord)
+			&& worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)
 			&& (biome instanceof BiomeGenDesert || (!worldObj.isRaining() && !worldObj.isThundering()));
 	}
 

@@ -28,7 +28,7 @@ public class BlockSaltLayer extends Block {
 		this.setStepSound(soundTypeGravel);
 		this.setBlockName("factumopus.salt");
 		this.setBlockTextureName("factumopus:salt");
-		this.setLightOpacity(0);
+		this.setLightOpacity(3);
 	}
 
 	@Override

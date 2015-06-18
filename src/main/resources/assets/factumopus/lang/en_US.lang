@@ -30,7 +30,7 @@ tile.factumopus.compressor.name=Air Compressor
 tile.factumopus.compressor.tip=Part of the Fume Compressor.\nNeeds to be placed one block above the multiblock structure, in the very center. Runs on charge.
 
 fluid.factumopus.brine=Brine
-fluid.factumopus.saturatedBrine=Saturated Brine
+fluid.factumopus.saturated_brine=Saturated Brine
 fluid.factumopus.voidfumes=Void Fumes
 fluid.factumopus.voidessence=Void Essence
 fluid.factumopus.voidgoo=Void Goo

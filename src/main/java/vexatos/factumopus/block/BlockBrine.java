@@ -10,23 +10,23 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import vexatos.factumopus.misc.material.MaterialBrine;
+import vexatos.factumopus.misc.material.MaterialSolidLiquid;
 
 /**
  * @author Vexatos
  */
-public class BlockBrine extends BlockFluidClassic {
+public class BlockBrine extends BlockFluidLikeWater {
 
-	public static final MaterialLiquid brineMaterial = new MaterialBrine();
+	public static final MaterialLiquid brineMaterial = new MaterialSolidLiquid(MapColor.silverColor);
 
 	public BlockBrine(Fluid fluid) {
-		// TODO Resolve this
-		super(fluid, Material.water);
+		super(fluid, brineMaterial);
 		this.setDensity(fluid.getDensity());
 		this.setBlockTextureName("factumopus:brine_still");
 		this.setBlockName("factumopus.brine");
+		this.setHardness(100.0F);
+		this.setLightOpacity(3);
 		renderType = super.getRenderType();
 	}
 
@@ -48,8 +48,8 @@ public class BlockBrine extends BlockFluidClassic {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int meta) {
-		return super.isBlockSolid(world, x, y, z, meta);
+	public boolean shouldFlowInto(Block block, Material material) {
+		return super.shouldFlowInto(block, material) && !(block instanceof BlockSaltLayer);
 	}
 
 	@Override

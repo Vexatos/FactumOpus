@@ -31,7 +31,7 @@ public class TilePondBase extends TileEntity {
 			return;
 		}
 		if(worldObj.getTotalWorldTime() % 80 == hashCode() % 80) {
-			active = shouldDry(worldObj, xCoord, yCoord + 1, zCoord);
+			active = shouldDry(worldObj, xCoord, yCoord + 2, zCoord);
 			if(active && !hasValidFluid(worldObj, xCoord, yCoord + 1, zCoord)) {
 				active = false;
 				counter = 0;
@@ -66,10 +66,10 @@ public class TilePondBase extends TileEntity {
 			world.setBlock(x, y, z, FactumOpus.blockBrine);
 			return true;
 		} else if(block instanceof BlockBrine) {
-			if(((BlockBrine) block).getFluid().getName().equals("factumopus.brine")) {
+			if(((BlockBrine) block).getFluid().getName().equalsIgnoreCase("factumopus.brine")) {
 				world.setBlock(x, y, z, FactumOpus.blockBrineSaturated);
 				return true;
-			} else if(((BlockBrine) block).getFluid().getName().equals("factumopus.saturatedBrine")) {
+			} else if(((BlockBrine) block).getFluid().getName().equalsIgnoreCase("factumopus.saturated_brine")) {
 				world.setBlock(x, y, z, FactumOpus.saltLayer);
 				return true;
 			}

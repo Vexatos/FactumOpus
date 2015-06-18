@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,10 +18,10 @@ import net.minecraft.util.FoodStats;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
 import vexatos.factumopus.FactumOpus;
+import vexatos.factumopus.misc.material.MaterialSolidLiquid;
 import vexatos.factumopus.tile.TileFluidVoidGoo;
 
 import java.util.ArrayList;
@@ -30,9 +29,9 @@ import java.util.ArrayList;
 /**
  * @author Vexatos
  */
-public class BlockFluidVoidGoo extends BlockFluidClassic {
+public class BlockFluidVoidGoo extends BlockFluidLikeWater {
 
-	public static final Material voidgooMaterial = new MaterialLiquid(MapColor.purpleColor);
+	public static final Material voidgooMaterial = new MaterialSolidLiquid(MapColor.purpleColor);
 	public static final DamageSource damageVoidGoo = new DamageSourceVoidGoo();
 
 	@SideOnly(Side.CLIENT)
@@ -44,6 +43,8 @@ public class BlockFluidVoidGoo extends BlockFluidClassic {
 		this.setBlockTextureName("factumopus:void_goo_fluid");
 		this.setBlockName("factumopus.void_goo_fluid");
 		this.setQuantaPerBlock(5);
+		this.setHardness(100.0F);
+		this.setLightOpacity(12);
 	}
 
 	@Override

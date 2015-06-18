@@ -16,6 +16,7 @@ public class TooltipUtil {
 
 	private static final int maxWidth = 220;
 
+	// Thanks, Sangar.
 	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
 	public static void addShiftTooltip(ItemStack stack, List tooltip) {
