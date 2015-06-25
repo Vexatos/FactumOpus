@@ -93,7 +93,7 @@ public class TilePondBase extends TileEntity {
 	private static boolean shouldDry(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoordsBody(x, z);
 		return biome != null
-			&& !(biome.temperature <= 0.95f || biome.rainfall > 0.2f)
+			&& biome.temperature > 0.95f && biome.rainfall <= 0.2f
 			&& world.isDaytime()
 			&& (!world.provider.hasNoSky)
 			&& world.canBlockSeeTheSky(x, y, z)

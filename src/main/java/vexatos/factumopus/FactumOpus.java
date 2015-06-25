@@ -33,7 +33,7 @@ import vexatos.factumopus.block.BlockPondBase;
 import vexatos.factumopus.block.BlockSaltLayer;
 import vexatos.factumopus.block.BlockSolidVoidGoo;
 import vexatos.factumopus.fluid.ContainerHandler;
-import vexatos.factumopus.integration.ModRecipes;
+import vexatos.factumopus.integration.recipes.ModRecipes;
 import vexatos.factumopus.integration.botany.IntegrationBotany;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerSaltBowl;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;

@@ -56,7 +56,7 @@ public class TileClaySand extends TileEntity {
 	private boolean shouldHarden() {
 		BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 		return biome != null
-			&& !(biome.temperature <= 0.95f || biome.rainfall > 0.2f)
+			&& biome.temperature > 0.95f && biome.rainfall <= 0.2f
 			&& worldObj.isDaytime()
 			&& (!worldObj.provider.hasNoSky)
 			&& worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)

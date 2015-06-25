@@ -22,7 +22,8 @@ public class Mods {
 		Botany = "Botany",
 		ExtraBees = "ExtraBees",
 		Factorization = "factorization",
-		Forestry = "Forestry";
+		Forestry = "Forestry",
+		Railcraft = "Railcraft";
 
 	//Other APIs
 	public static class API {

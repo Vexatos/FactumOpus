@@ -1,5 +1,6 @@
 package vexatos.factumopus.item;
 
+import factorization.shared.Sound;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -34,6 +35,7 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 			BiomeGenBase biome = world.getBiomeGenForCoords(((int) entity.posX), ((int) entity.posZ));
 			if(biome != null && biome.temperature > 0.3f) {
 				entity.attackEntityFrom(sulfurWarmer, 1.0f);
+				Sound.acidBurn.playAt(entity.worldObj, entity.posX, entity.posY, entity.posZ);
 				--stack.stackSize;
 				if(stack.stackSize <= 0) {
 					if(entity instanceof EntityPlayer) {
@@ -56,6 +58,7 @@ public class ItemSulfurTrioxide extends ItemFactumOpus {
 					ItemStack stack = entity.getEntityItem();
 					if(stack != null) {
 						--stack.stackSize;
+						Sound.acidBurn.playAt(entity.worldObj, entity.posX, entity.posY, entity.posZ);
 						if(stack.stackSize <= 0) {
 							entity.setDead();
 							return true;
