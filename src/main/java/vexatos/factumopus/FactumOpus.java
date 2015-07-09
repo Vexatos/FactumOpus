@@ -7,6 +7,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -33,11 +34,10 @@ import vexatos.factumopus.block.BlockPondBase;
 import vexatos.factumopus.block.BlockSaltLayer;
 import vexatos.factumopus.block.BlockSolidVoidGoo;
 import vexatos.factumopus.fluid.ContainerHandler;
-import vexatos.factumopus.integration.recipes.ModRecipes;
-import vexatos.factumopus.integration.botany.IntegrationBotany;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerSaltBowl;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;
 import vexatos.factumopus.integration.extrabees.IntegrationExtraBees;
+import vexatos.factumopus.integration.recipes.ModRecipes;
 import vexatos.factumopus.item.ItemAcidBottles;
 import vexatos.factumopus.item.ItemBucketFactumOpus;
 import vexatos.factumopus.item.ItemLikeBonemeal;
@@ -56,7 +56,7 @@ import vexatos.factumopus.tile.TilePondBase;
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
 	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);after:"
 		+ Mods.API.BuildCraftTransport + "@[4.0,);after:" + Mods.Botany
-		+ "@[2.0,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[3.5.7,)")
+		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[3.5.7,)")
 public class FactumOpus {
 
 	@Instance(Mods.FactumOpus)
@@ -75,7 +75,6 @@ public class FactumOpus {
 	public static ContainerHandler containerHandler;
 
 	public static IntegrationExtraBees extraBees;
-	public static IntegrationBotany botany;
 
 	public static Item itemBowls;
 	public static Item itemMaterial;
@@ -212,8 +211,11 @@ public class FactumOpus {
 		}
 
 		if(Mods.isLoaded(Mods.Botany)) {
-			botany = new IntegrationBotany();
-			botany.init();
+			FactumOpus.log.info("Adding Botany integration.");
+			FMLInterModComms.sendMessage(Mods.Botany, "add-acid-fertiliser-2", new ItemStack(itemSalts, 1, 3));
+			FMLInterModComms.sendMessage(Mods.Botany, "add-nutrient-fertiliser-2", new ItemStack(itemSalts, 1, 4));
+			FMLInterModComms.sendMessage(Mods.Botany, "add-acid-fertiliser-1", new ItemStack(itemSalts, 1, 8));
+			FMLInterModComms.sendMessage(Mods.Botany, "add-nutrient-fertiliser-1", new ItemStack(itemSalts, 1, 9));
 		}
 		if(Mods.API.hasAPI(Mods.API.BuildCraftTransport)) {
 			registerStripesHandlers();
