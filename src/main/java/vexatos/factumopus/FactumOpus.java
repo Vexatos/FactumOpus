@@ -49,6 +49,7 @@ import vexatos.factumopus.reference.Mods;
 import vexatos.factumopus.tile.TileClaySand;
 import vexatos.factumopus.tile.TileFluidVoidGoo;
 import vexatos.factumopus.tile.TilePondBase;
+import vexatos.factumopus.tile.compressor.TileFumeCompressor;
 
 /**
  * @author Vexatos
@@ -233,7 +234,7 @@ public class FactumOpus {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-
+		TileFumeCompressor.setupFluidStacks();
 	}
 
 	@SideOnly(Side.CLIENT)
