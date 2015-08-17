@@ -10,6 +10,7 @@ import factorization.shared.Core;
 import factorization.weird.TileEntityDayBarrel;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import vexatos.factumopus.FactumOpus;
 
@@ -87,13 +88,14 @@ public class ModRecipes {
 					doubleSulfuricAcid.copy(),
 					new ItemStack(Items.glass_bottle, 1, 0))));
 		}
-
-		crystallizerRecipes.add(new FactumOpusCrystallizerRecipe(
-			Arrays.asList(new OreDictItemStack(Core.registry.sulfuric_acid.copy()),
-				new OreDictItemStack("dustSaltpeter", 4)),
-			new ItemStack(FactumOpus.itemSalts, 1, 0),
-			Arrays.asList(new ItemStack(FactumOpus.itemAcidBottles, 1, 0), new ItemStack(FactumOpus.itemSalts, 3, 5)),
-			Core.registry.sulfuric_acid.copy()));
+		if(OreDictionary.getOres("dustSaltpeter").size() > 0) {
+			crystallizerRecipes.add(new FactumOpusCrystallizerRecipe(
+				Arrays.asList(new OreDictItemStack(Core.registry.sulfuric_acid.copy()),
+					new OreDictItemStack("dustSaltpeter", 4)),
+				new ItemStack(FactumOpus.itemSalts, 1, 0),
+				Arrays.asList(new ItemStack(FactumOpus.itemAcidBottles, 1, 0), new ItemStack(FactumOpus.itemSalts, 3, 5)),
+				Core.registry.sulfuric_acid.copy()));
+		}
 		crystallizerRecipes.add(new FactumOpusCrystallizerRecipe(
 			Arrays.asList(new OreDictItemStack(Core.registry.sulfuric_acid.copy()),
 				new OreDictItemStack(new ItemStack(FactumOpus.itemBowls, 1, 2))),

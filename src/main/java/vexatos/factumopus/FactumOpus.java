@@ -14,6 +14,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import factorization.shared.Core;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
@@ -150,6 +151,7 @@ public class FactumOpus {
 		itemBucketBrine = new ItemBucketFactumOpus(blockBrine)
 			.setUnlocalizedName("brine_bucket").setContainerItem(Items.bucket);
 		GameRegistry.registerItem(itemBucketBrine, "factumopus.itemBucketBrine");
+		blacklistFluid(brine);
 
 		containerHandler.buckets.put(blockBrine, itemBucketBrine);
 		FluidContainerRegistry.registerFluidContainer(brine,
@@ -162,6 +164,7 @@ public class FactumOpus {
 		itemBucketBrineSaturated = new ItemBucketFactumOpus(blockBrineSaturated)
 			.setUnlocalizedName("brine_bucket_saturated").setContainerItem(Items.bucket);
 		GameRegistry.registerItem(itemBucketBrineSaturated, "factumopus.itemBucketBrineSaturated");
+		blacklistFluid(brineSaturated);
 
 		containerHandler.buckets.put(blockBrineSaturated, itemBucketBrineSaturated);
 		FluidContainerRegistry.registerFluidContainer(brineSaturated,
@@ -171,14 +174,20 @@ public class FactumOpus {
 		voidfumes = new Fluid("factumopus.voidfumes").setGaseous(true).setDensity(20).setViscosity(20);
 		FluidRegistry.registerFluid(voidfumes);
 		FluidContainerRegistry.registerFluidContainer(voidfumes, new ItemStack(itemBottles, 1, 0), new ItemStack(Items.glass_bottle));
+		blacklistFluid(voidfumes);
 
 		// Void Essence
 		voidessence = new Fluid("factumopus.voidessence").setGaseous(true);
 		FluidRegistry.registerFluid(voidessence);
+		blacklistFluid(voidessence);
 
 		// Void Goo
 		voidgoo = new Fluid("factumopus.voidgoo").setDensity(10000).setViscosity(10000);
 		FluidRegistry.registerFluid(voidgoo);
+		FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_preventworldgen", "Liquid." + voidgoo.getName());
+		FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_preventloot", "Liquid." + voidgoo.getName());
+		FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_configure", "Liquid." + voidgoo.getName() + "=100000,50000,144000,6");
+		FMLInterModComms.sendMessage(Mods.Mystcraft, "blacklistfluid", voidgoo.getName());
 
 		blockVoidGooFluid = new BlockFluidVoidGoo(voidgoo);
 		GameRegistry.registerBlock(blockVoidGooFluid, ItemBlockFactumOpus.class, "factumopus.blockFluidVoidGoo");
@@ -198,8 +207,19 @@ public class FactumOpus {
 			extraBees.preInit();
 		}
 
+		{
+			String darkIronOreName = Core.registry.dark_iron_ore.getUnlocalizedName();
+			FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_configure", "Material." + darkIronOreName + "=10000,10000,72000,5");
+			FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_preventloot", "Material." + darkIronOreName);
+		}
+
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(containerHandler);
+	}
+
+	private void blacklistFluid(Fluid fluid) {
+		FMLInterModComms.sendMessage(Mods.RFTools, "dimlet_blacklist", "Liquid." + fluid.getName());
+		FMLInterModComms.sendMessage(Mods.Mystcraft, "blacklistfluid", fluid.getName());
 	}
 
 	@EventHandler
