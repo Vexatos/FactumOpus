@@ -1,5 +1,6 @@
 package vexatos.factumopus.block;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -25,18 +26,27 @@ public class BlockFluidLikeWater extends BlockFluidClassic {
 	static {
 		String methodname;
 		try {
-			methodname = "func_72918_a";
-			World.class.getDeclaredMethod(methodname, AxisAlignedBB.class, Material.class, Entity.class);
-			waterHandlingMethod = methodname;
-		} catch(NoSuchMethodException e) {
-			FactumOpus.log.info("[Water Physics] Deobfuscated Environment detected");
-			try {
-				methodname = "handleMaterialAcceleration";
-				World.class.getDeclaredMethod(methodname, AxisAlignedBB.class, Material.class, Entity.class);
-				waterHandlingMethod = methodname;
-			} catch(NoSuchMethodException e2) {
-				FactumOpus.log.error("[Water Physics] Could not find water physics method. Brine will not have water physics!");
-				waterHandlingMethod = null;
+			waterHandlingMethod = ReflectionHelper.findMethod(World.class, null, new String[] { "handleMaterialAcceleration", "func_72918_a" },
+				AxisAlignedBB.class, Material.class, Entity.class).getName();
+		} catch(Exception ue) {
+			waterHandlingMethod = null;
+		} finally {
+			if(waterHandlingMethod == null) {
+				try {
+					methodname = "func_72918_a";
+					World.class.getDeclaredMethod(methodname, AxisAlignedBB.class, Material.class, Entity.class);
+					waterHandlingMethod = methodname;
+				} catch(NoSuchMethodException e) {
+					FactumOpus.log.info("[Water Physics] Deobfuscated Environment detected");
+					try {
+						methodname = "handleMaterialAcceleration";
+						World.class.getDeclaredMethod(methodname, AxisAlignedBB.class, Material.class, Entity.class);
+						waterHandlingMethod = methodname;
+					} catch(NoSuchMethodException e2) {
+						FactumOpus.log.error("[Water Physics] Could not find water physics method. Brine will not have water physics!");
+						waterHandlingMethod = null;
+					}
+				}
 			}
 		}
 	}

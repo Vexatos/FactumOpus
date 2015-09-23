@@ -180,7 +180,10 @@ public class BlockFluidVoidGoo extends BlockFluidLikeWater {
 			float health = living.getHealth();
 			if((health > 22F || world.getTotalWorldTime() % 8 == 0) && health > 0.0F) {
 				if(health <= 1.0F) {
-					entity.attackEntityFrom(damageVoidGoo, 200f);
+					living.attackEntityFrom(damageVoidGoo, 200f);
+					/*living.func_110142_aN().func_94547_a(damageVoidGoo, living.getHealth(), living.getHealth());
+					living.setHealth(0);
+					living.onDeath(damageVoidGoo);*/
 				} else {
 					living.setHealth(Math.max(health - 1.0F, 0.9f));
 				}
