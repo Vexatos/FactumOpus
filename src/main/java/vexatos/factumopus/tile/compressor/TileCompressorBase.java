@@ -7,14 +7,14 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * @author Vexatos
  */
-public class TileCompressorBase extends TileEntity {
+public abstract class TileCompressorBase extends TileEntity {
 
 	@Override
 	public boolean canUpdate() {
 		return false;
 	}
 
-	protected final Coord master = Coord.ZERO.copy();
+	private final Coord master = Coord.ZERO.copy();
 
 	public void setMaster(TileFumeCompressor tile) {
 		if(tile == null) {
@@ -24,33 +24,37 @@ public class TileCompressorBase extends TileEntity {
 		}
 	}
 
-	public Coord getMaster() {
+	public Coord getMasterCoord() {
 		return this.master;
+	}
+
+	public TileFumeCompressor getMaster() {
+		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		if(tile == null) {
+			setMaster(null);
+		}
+		return tile != null && tile.isValidMultiblock() ? tile : null;
 	}
 
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if(master.blockExists()) {
-			TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
-			if(te != null) {
-				te.onMultiblockDeconstructed();
-			} else {
-				master.set(Coord.ZERO);
-			}
+		TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
+		if(te != null) {
+			te.onMultiblockDeconstructed();
+		} else {
+			master.set(Coord.ZERO);
 		}
 	}
 
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if(master.blockExists()) {
-			TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
-			if(te != null) {
-				te.onMultiblockDeconstructed();
-			} else {
-				master.set(Coord.ZERO);
-			}
+		TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
+		if(te != null) {
+			te.onMultiblockDeconstructed();
+		} else {
+			master.set(Coord.ZERO);
 		}
 	}
 

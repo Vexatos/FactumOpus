@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  */
 public class TileCompressorValve extends TileCompressorBase implements IFluidHandler, IMeterInfo {
 
-	public static enum Type {
+	public enum Type {
 		IN, OUT
 	}
 
@@ -23,62 +23,59 @@ public class TileCompressorValve extends TileCompressorBase implements IFluidHan
 	}
 
 	public Type getType() {
-		return this.type;
+		TileFumeCompressor tile = getMaster();
+		return tile != null && tile.yCoord - this.yCoord >= 4 ? Type.OUT : Type.IN;
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		if(resource == null || !canFill(from, resource.getFluid())) {
+			return 0;
+		}
+		TileFumeCompressor tile = getMaster();
 		return tile != null ? tile.fill(from, resource, doFill) : 0;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		if(resource == null || !canDrain(from, resource.getFluid())) {
+			return null;
+		}
+		TileFumeCompressor tile = getMaster();
 		return tile != null ? tile.drain(from, resource, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		if(!canDrain(from, null)) {
+			return null;
+		}
+		TileFumeCompressor tile = getMaster();
 		return tile != null ? tile.drain(from, maxDrain, doDrain) : null;
 	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
-		if(tile != null && tile.getMode() == TileFumeCompressor.Mode.INPUT && this.type == Type.IN) {
-			int fumeAmt = tile.getFumeInputTank().getFluidAmount();
-			int essenceAmt = tile.getEssenceInputTank().getFluidAmount();
-			if(fumeAmt == 0 && essenceAmt == 0) {
-				return fluid == TileFumeCompressor.fume_stack.getFluid()
-					|| fluid == TileFumeCompressor.essence_stack.getFluid();
-			} else if(fumeAmt != 0) {
-				return fluid == TileFumeCompressor.fume_stack.getFluid();
-			} else {
-				return fluid == TileFumeCompressor.essence_stack.getFluid();
-			}
-		}
-		return false;
+		TileFumeCompressor tile = getMaster();
+		return getType() == Type.IN;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
-		return from == ForgeDirection.DOWN && tile != null
-			&& tile.getMode() == TileFumeCompressor.Mode.OUTPUT
-			&& this.type == Type.OUT;
+		//TileFumeCompressor tile = getMaster();
+		return from == ForgeDirection.DOWN && getType() == Type.OUT;
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		TileFumeCompressor tile = getMaster();
 		return tile != null ? tile.getTankInfo(from) : null;
 	}
 
 	@Override
 	public String getInfo() {
 		// TODO Make this
-		return null;
+		TileFumeCompressor tile = getMaster();
+		return tile != null ? tile.getInfo() : "Not a valid structure!";
 	}
 }

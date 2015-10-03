@@ -34,6 +34,9 @@ import vexatos.factumopus.block.BlockFluidVoidGoo;
 import vexatos.factumopus.block.BlockPondBase;
 import vexatos.factumopus.block.BlockSaltLayer;
 import vexatos.factumopus.block.BlockSolidVoidGoo;
+import vexatos.factumopus.block.compressor.BlockCompressorValve;
+import vexatos.factumopus.block.compressor.BlockCompressorWall;
+import vexatos.factumopus.block.compressor.BlockFumeCompressor;
 import vexatos.factumopus.fluid.ContainerHandler;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerSaltBowl;
 import vexatos.factumopus.integration.buildcraft.StripesHandlerVoidFumes;
@@ -50,6 +53,8 @@ import vexatos.factumopus.reference.Mods;
 import vexatos.factumopus.tile.TileClaySand;
 import vexatos.factumopus.tile.TileFluidVoidGoo;
 import vexatos.factumopus.tile.TilePondBase;
+import vexatos.factumopus.tile.compressor.TileCompressorValve;
+import vexatos.factumopus.tile.compressor.TileCompressorWall;
 import vexatos.factumopus.tile.compressor.TileFumeCompressor;
 
 /**
@@ -95,6 +100,10 @@ public class FactumOpus {
 	public static Block saltLayer;
 	public static BlockFluidVoidGoo blockVoidGooFluid;
 	public static Block blockVoidGooSolid;
+
+	public static Block blockCompressorWall;
+	public static Block blockCompressorValve;
+	public static Block blockFumeCompressor;
 
 	public static Fluid brine;
 	public static Fluid brineSaturated;
@@ -200,6 +209,18 @@ public class FactumOpus {
 		containerHandler.buckets.put(blockVoidGooFluid, itemBucketVoidGoo);
 		FluidContainerRegistry.registerFluidContainer(voidgoo,
 			new ItemStack(itemBucketVoidGoo), new ItemStack(Items.bucket));
+
+		blockCompressorWall = new BlockCompressorWall();
+		GameRegistry.registerBlock(blockCompressorWall, ItemBlockFactumOpus.class, "factumopus.blockCompressorWall");
+		GameRegistry.registerTileEntity(TileCompressorWall.class, "factumopus.blockCompressorWall");
+
+		blockCompressorValve = new BlockCompressorValve();
+		GameRegistry.registerBlock(blockCompressorValve, ItemBlockFactumOpus.class, "factumopus.blockCompressorValve");
+		GameRegistry.registerTileEntity(TileCompressorValve.class, "factumopus.blockCompressorValve");
+
+		blockFumeCompressor = new BlockFumeCompressor();
+		GameRegistry.registerBlock(blockFumeCompressor, ItemBlockFactumOpus.class, "factumopus.blockFumeCompressor");
+		GameRegistry.registerTileEntity(TileFumeCompressor.class, "factumopus.blockFumeCompressor");
 
 		// Compat
 		if(Mods.isLoaded(Mods.Forestry) && Mods.isLoaded(Mods.ExtraBees)) {

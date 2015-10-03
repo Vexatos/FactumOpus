@@ -9,7 +9,7 @@ import vexatos.factumopus.FactumOpus;
  */
 public class BlockFactumOpus extends Block {
 
-	protected BlockFactumOpus(Material material) {
+	public BlockFactumOpus(Material material) {
 		super(material);
 		this.setCreativeTab(FactumOpus.tab);
 	}
