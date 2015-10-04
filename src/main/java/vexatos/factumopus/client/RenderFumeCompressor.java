@@ -30,7 +30,7 @@ public class RenderFumeCompressor extends TileEntitySpecialRenderer implements I
 			motion += 100;
 		}
 		GL11.glTranslatef((float) x, (float) y + 0.5f + (motion / 100f) * 0.75f, (float) z + 1.0F);
-		TileEntityMixerRenderer.renderWithRotation(360 * f);
+		TileEntityMixerRenderer.renderWithRotation((compressor.getWorldObj().getTotalWorldTime() % 2) * 180 * f);
 		GL11.glPopMatrix();
 	}
 

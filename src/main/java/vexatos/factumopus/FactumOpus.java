@@ -137,7 +137,7 @@ public class FactumOpus {
 
 		containerHandler = new ContainerHandler();
 
-		itemBottles = new ItemMultiple("void_bottle", "sulfur_trioxide_bottle")
+		itemBottles = new ItemMultiple("void_fume_bottle", "void_essence_bottle", "sulfur_trioxide_bottle")
 			.setMaxStackSize(16).setContainerItem(Items.glass_bottle);
 		GameRegistry.registerItem(itemBottles, "factumopus.itemBottle");
 
@@ -189,6 +189,7 @@ public class FactumOpus {
 		// Void Essence
 		voidessence = new Fluid("factumopus.voidessence").setGaseous(true);
 		FluidRegistry.registerFluid(voidessence);
+		FluidContainerRegistry.registerFluidContainer(voidessence, new ItemStack(itemBottles, 1, 1), new ItemStack(Items.glass_bottle));
 		blacklistFluid(voidessence);
 
 		// Void Goo

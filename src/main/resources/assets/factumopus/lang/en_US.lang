@@ -60,8 +60,10 @@ item.factumopus.iron_bowl.tip=Don't spill it.
 item.factumopus.dark_iron_bowl.name=Bowl of Purple Dissolved Iron
 item.factumopus.dark_iron_bowl.tip=It seems to talk to you. Either that, or the fumes it's giving off are bad for your sanity.
 
-item.factumopus.void_bottle.name=Bottle of Void Fumes
-item.factumopus.void_bottle.tip=No idea how the air changed color this quickly...
+item.factumopus.void_fume_bottle.name=Bottle of Void Fumes
+item.factumopus.void_fume_bottle.tip=No idea how the air changed color this quickly...
+item.factumopus.void_essence_bottle.name=Bottle of Void Essence
+item.factumopus.void_essence_bottle.tip=Still gaseous, but definitely more dense.
 item.factumopus.nitric_acid.name=Bottle of Nitric Acid
 item.factumopus.nitric_acid.tip=Do not drink it. Seriously, don't.
 item.factumopus.hydrochloric_acid.name=Bottle of Hydrochloric Acid

@@ -58,7 +58,8 @@ public class ContainerHandler {
 		if(event.world != null && event.action == Action.RIGHT_CLICK_AIR) {
 			ItemStack heldStack = event.entityPlayer.getCurrentEquippedItem();
 
-			if(heldStack != null && heldStack.getItem() == Items.glass_bottle && event.entityPlayer.posY < 5) {
+			if(heldStack != null && heldStack.getItem() == Items.glass_bottle
+				&& event.entityPlayer.boundingBox != null && event.entityPlayer.boundingBox.minY < 5f) {
 				MovingObjectPosition pos = RayTracer.raytraceFromPlayer(event.world, event.entityPlayer, false);
 
 				if(pos == null) {
@@ -73,9 +74,7 @@ public class ContainerHandler {
 						event.entityPlayer.dropPlayerItemWithRandomChoice(newStack, true);
 					}
 
-					if(event.world.isRemote) {
-						event.entityPlayer.swingItem();
-					}
+					event.entityPlayer.swingItem();
 				}
 			}
 		}

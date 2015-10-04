@@ -47,9 +47,8 @@ public class BlockSaltLayer extends Block {
 					player.dropPlayerItemWithRandomChoice(newStack, true);
 				}
 
-				if(world.isRemote) {
-					player.swingItem();
-				} else {
+				player.swingItem();
+				if(!world.isRemote) {
 					world.setBlockToAir(x, y, z);
 				}
 				return true;

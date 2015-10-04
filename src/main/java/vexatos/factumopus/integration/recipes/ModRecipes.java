@@ -28,10 +28,10 @@ public class ModRecipes {
 			Items.bowl);
 		GameRegistry.addShapedRecipe(new ItemStack(FactumOpus.itemBowls, 1, 0),
 			"v", "b", 'v', new ItemStack(FactumOpus.itemMaterial, 1, 0), 'b', new ItemStack(FactumOpus.itemBowls, 1, 1));
-		GameRegistry.addShapelessRecipe(new ItemStack(FactumOpus.itemBottles, 1, 1),
+		GameRegistry.addShapelessRecipe(new ItemStack(FactumOpus.itemBottles, 1, 2),
 			new ItemStack(FactumOpus.itemSulfurTrioxide, 1, 0), Items.glass_bottle);
 		GameRegistry.addShapelessRecipe(new ItemStack(FactumOpus.itemSulfurTrioxide, 1, 0),
-			new ItemStack(FactumOpus.itemBottles, 1, 1));
+			new ItemStack(FactumOpus.itemBottles, 1, 2));
 
 		GameRegistry.addShapelessRecipe(new ItemStack(FactumOpus.itemSalts, 4, 3),
 			new ItemStack(FactumOpus.itemSalts, 1, 0));
@@ -81,7 +81,7 @@ public class ModRecipes {
 				Arrays.asList(doubleSulfuricAcid.copy())));
 			mixerRecipes.add(new FactumOpusMixerRecipe(
 				Arrays.asList(
-					new OreDictItemStack(new ItemStack(FactumOpus.itemBottles, 1, 1)),
+					new OreDictItemStack(new ItemStack(FactumOpus.itemBottles, 1, 2)),
 					new OreDictItemStack(new ItemStack(Items.potionitem, 1, 0)),
 					new OreDictItemStack(Core.registry.sulfuric_acid.copy())),
 				Arrays.asList(

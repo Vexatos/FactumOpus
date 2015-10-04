@@ -93,7 +93,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 	private FluidStack outputStack;
 
 	private boolean isValid;
-	private int motion;
+	private int motion = 100;
 
 	public TileFumeCompressor() {
 		this.fumeTank = new FluidTank(new FluidStack(FluidRegistry.getFluid("factumopus.voidfumes"), 0), 8000);
@@ -114,8 +114,21 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					}
 				}
 			} else {
+				final int oldMotion = motion;
 				// Valid multiblock, do work.
 				if(mode == Mode.INPUT) {
+					if(motion <= 0) {
+						int chargeNeeded = 8;
+						int depleted = this.charge.deplete(chargeNeeded);
+						if(depleted >= chargeNeeded) {
+							motion += 2;
+							if(motion >= 0) {
+								motion = 100;
+							}
+						}
+					} else if(motion < 100) {
+						motion = motion - 100;
+					}
 					if(getFumeInputTank().getFluidAmount() == getFumeInputTank().getCapacity()) {
 						mode = Mode.COMPRESSING;
 						this.outputStack = createOutput(essence_stack);
@@ -150,27 +163,45 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 						if(depleted >= chargeNeeded) {
 							motion -= 2;
 							airAmount += 40; // 800 mB per second
+							if(motion <= 0) {
+								motion = -100;
+								pressuriseEntities();
+							}
 							if(airAmount >= getAirRequired()) {
 								getOutputTank().setFluid(outputStack.copy());
 								this.outputStack = null;
 								mode = Mode.OUTPUT;
 								airAmount = 0;
+								if(motion > 0) {
+									motion = motion - 100;
+								}
 								//} else {
 								//airAmount += 800;
 							}
-							if(motion <= 0) {
-								motion = -100;
-							}
 						}
 					}
-					sendNetworkUpdate();
 				} else if(mode == Mode.OUTPUT) {
+					if(motion <= 0) {
+						int chargeNeeded = 8;
+						int depleted = this.charge.deplete(chargeNeeded);
+						if(depleted >= chargeNeeded) {
+							motion += 2;
+							if(motion >= 0) {
+								motion = 100;
+							}
+						}
+					} else if(motion < 100) {
+						motion = motion - 100;
+					}
 					if(getOutputTank().getFluidAmount() == 0) {
 						getOutputTank().setFluid(null);
 						mode = Mode.INPUT;
 					}
 				} else if(mode == Mode.NONE) {
 					mode = getOutputTank().getFluidAmount() > 0 ? Mode.OUTPUT : Mode.INPUT;
+				}
+				if(motion != oldMotion) {
+					sendNetworkUpdate();
 				}
 			}
 			this.charge.update();
