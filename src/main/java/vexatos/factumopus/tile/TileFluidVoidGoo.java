@@ -1,14 +1,13 @@
 package vexatos.factumopus.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import vexatos.factumopus.FactumOpus;
 import vexatos.factumopus.block.BlockFluidVoidGoo;
 
 /**
  * @author Vexatos
  */
-public class TileFluidVoidGoo extends TileEntity {
+public class TileFluidVoidGoo extends TileEntityFactumOpus {
 
 	private int counter;
 	private int percentage;

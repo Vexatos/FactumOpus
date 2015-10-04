@@ -2,12 +2,12 @@ package vexatos.factumopus.tile.compressor;
 
 import factorization.api.Coord;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import vexatos.factumopus.tile.TileEntityFactumOpus;
 
 /**
  * @author Vexatos
  */
-public abstract class TileCompressorBase extends TileEntity {
+public abstract class TileCompressorBase extends TileEntityFactumOpus {
 
 	@Override
 	public boolean canUpdate() {
@@ -18,18 +18,21 @@ public abstract class TileCompressorBase extends TileEntity {
 
 	public void setMaster(TileFumeCompressor tile) {
 		if(tile == null) {
-			master.set(Coord.ZERO);
+			getMasterCoord().set(Coord.ZERO);
 		} else {
-			master.set(tile);
+			getMasterCoord().set(tile);
 		}
 	}
 
 	public Coord getMasterCoord() {
+		if(master.w() == null) {
+			master.setWorld(this.worldObj);
+		}
 		return this.master;
 	}
 
 	public TileFumeCompressor getMaster() {
-		TileFumeCompressor tile = master.getTE(TileFumeCompressor.class);
+		TileFumeCompressor tile = getMasterCoord().getTE(TileFumeCompressor.class);
 		if(tile == null) {
 			setMaster(null);
 		}
@@ -39,35 +42,34 @@ public abstract class TileCompressorBase extends TileEntity {
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
+		TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
 		if(te != null) {
 			te.onMultiblockDeconstructed();
 		} else {
-			master.set(Coord.ZERO);
+			getMasterCoord().set(Coord.ZERO);
 		}
 	}
 
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		TileFumeCompressor te = master.getTE(TileFumeCompressor.class);
+		TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
 		if(te != null) {
 			te.onMultiblockDeconstructed();
 		} else {
-			master.set(Coord.ZERO);
+			getMasterCoord().set(Coord.ZERO);
 		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		master.readFromNBT("factumopus:", tag);
-		master.setWorld(this.worldObj);
+		getMasterCoord().readFromNBT("factumopus:", tag);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		master.writeToNBT("factumopus:", tag);
+		getMasterCoord().writeToNBT("factumopus:", tag);
 	}
 }

@@ -1,7 +1,6 @@
 package vexatos.factumopus.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenDesert;
 import vexatos.factumopus.FactumOpus;
@@ -9,7 +8,7 @@ import vexatos.factumopus.FactumOpus;
 /**
  * @author Vexatos
  */
-public class TileClaySand extends TileEntity {
+public class TileClaySand extends TileEntityFactumOpus {
 
 	private int counter;
 	private int percentage;

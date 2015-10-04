@@ -61,7 +61,8 @@ import vexatos.factumopus.tile.compressor.TileFumeCompressor;
  * @author Vexatos
  */
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
-	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);after:"
+	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);required-after:"
+		+ Mods.BuildCraftCore + "@[7.0.6,);after:"
 		+ Mods.API.BuildCraftTransport + "@[4.0,);after:" + Mods.Botany
 		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[3.5.7,)")
 public class FactumOpus {
@@ -103,7 +104,7 @@ public class FactumOpus {
 
 	public static Block blockCompressorWall;
 	public static Block blockCompressorValve;
-	public static Block blockFumeCompressor;
+	public static BlockFumeCompressor blockFumeCompressor;
 
 	public static Fluid brine;
 	public static Fluid brineSaturated;

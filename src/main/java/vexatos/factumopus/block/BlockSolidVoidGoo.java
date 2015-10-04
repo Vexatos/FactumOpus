@@ -2,7 +2,9 @@ package vexatos.factumopus.block;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 import vexatos.factumopus.FactumOpus;
 import vexatos.factumopus.misc.material.MaterialFactumOpus;
 
@@ -43,6 +45,16 @@ public class BlockSolidVoidGoo extends BlockFactumOpus {
 	@Override
 	public int quantityDroppedWithBonus(int meta, Random rand) {
 		return quantityDropped(rand) + rand.nextInt(5);
+	}
+
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
+
+	@Override
+	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata) {
+		return true;
 	}
 
 	protected static final SlimeySound slimeySound = new SlimeySound();

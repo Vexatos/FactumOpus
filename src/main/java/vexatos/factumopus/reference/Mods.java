@@ -20,6 +20,7 @@ public class Mods {
 
 	public static final String
 		Botany = "Botany",
+		BuildCraftCore = "BuildCraft|Core",
 		ExtraBees = "ExtraBees",
 		Factorization = "factorization",
 		Forestry = "Forestry",

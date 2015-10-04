@@ -7,10 +7,11 @@ import vexatos.factumopus.tile.compressor.TileCompressorValve;
 /**
  * @author Vexatos
  */
-public class BlockCompressorValve extends BlockCompressorWall {
+public class BlockCompressorValve extends BlockCompressorBase {
 	public BlockCompressorValve() {
 		super();
 		this.setBlockTextureName("factumopus:compressor_valve");
+		this.setTopTextureName("factumopus:compressor_valve_top");
 		this.setBlockName("factumopus.compressor_valve");
 	}
 

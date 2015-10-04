@@ -3,7 +3,6 @@ package vexatos.factumopus.tile;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenDesert;
@@ -13,7 +12,7 @@ import vexatos.factumopus.block.BlockBrine;
 /**
  * @author Vexatos
  */
-public class TilePondBase extends TileEntity {
+public class TilePondBase extends TileEntityFactumOpus {
 
 	private int counter;
 	private int percentage;

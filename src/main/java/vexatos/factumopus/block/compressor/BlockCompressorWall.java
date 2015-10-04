@@ -1,29 +1,19 @@
 package vexatos.factumopus.block.compressor;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import vexatos.factumopus.block.BlockFactumOpus;
 import vexatos.factumopus.tile.compressor.TileCompressorWall;
 
 /**
  * @author Vexatos
  */
-public class BlockCompressorWall extends BlockFactumOpus {
+public class BlockCompressorWall extends BlockCompressorBase {
 
 	public BlockCompressorWall() {
-		super(Material.iron);
-		this.setHarvestLevel("pickaxe", 2);
-		this.setHardness(5.0F);
-		this.setResistance(15.0F);
-		this.setStepSound(soundTypeMetal);
+		super();
 		this.setBlockTextureName("factumopus:compressor_wall");
+		this.setTopTextureName("factumopus:compressor_wall_top");
 		this.setBlockName("factumopus.compressor_wall");
-	}
-
-	@Override
-	public boolean hasTileEntity(int metadata) {
-		return true;
 	}
 
 	@Override

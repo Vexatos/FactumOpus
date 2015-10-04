@@ -22,10 +22,15 @@ public class RenderFumeCompressor extends TileEntitySpecialRenderer implements I
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-		TileFumeCompressor turbine = (TileFumeCompressor) tile;
+		TileFumeCompressor compressor = (TileFumeCompressor) tile;
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
-		TileEntityMixerRenderer.renderWithRotation(35);
+		//GL11.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
+		int motion = compressor.getMotion();
+		if(motion < 0) {
+			motion += 100;
+		}
+		GL11.glTranslatef((float) x, (float) y + 0.5f + (motion / 100f) * 0.75f, (float) z + 1.0F);
+		TileEntityMixerRenderer.renderWithRotation(360 * f);
 		GL11.glPopMatrix();
 	}
 

@@ -56,8 +56,8 @@ public class TileCompressorValve extends TileCompressorBase implements IFluidHan
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		TileFumeCompressor tile = getMaster();
-		return getType() == Type.IN;
+		//TileFumeCompressor tile = getMaster();
+		return from != ForgeDirection.DOWN && getType() == Type.IN;
 	}
 
 	@Override
@@ -74,7 +74,6 @@ public class TileCompressorValve extends TileCompressorBase implements IFluidHan
 
 	@Override
 	public String getInfo() {
-		// TODO Make this
 		TileFumeCompressor tile = getMaster();
 		return tile != null ? tile.getInfo() : "Not a valid structure!";
 	}
