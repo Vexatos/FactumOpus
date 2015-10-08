@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vexatos.factumopus.block.BlockBrine;
@@ -61,8 +62,7 @@ import vexatos.factumopus.tile.compressor.TileFumeCompressor;
  * @author Vexatos
  */
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
-	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);required-after:"
-		+ Mods.BuildCraftCore + "@[7.0.6,);after:"
+	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);after:"
 		+ Mods.API.BuildCraftTransport + "@[4.0,);after:" + Mods.Botany
 		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[3.5.7,)")
 public class FactumOpus {
@@ -248,8 +248,6 @@ public class FactumOpus {
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
 
-		ModRecipes.registerRecipes();
-
 		if(Mods.isLoaded(Mods.Forestry) && Mods.isLoaded(Mods.ExtraBees) && extraBees != null) {
 			extraBees.init();
 		}
@@ -278,6 +276,13 @@ public class FactumOpus {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		TileFumeCompressor.setupFluidStacks();
+
+		Item pipeWaterproof = GameRegistry.findItem(Mods.BuildCraftTransport, "pipeWaterproof");
+		if(pipeWaterproof != null) {
+			OreDictionary.registerOre("fo:airSealant", pipeWaterproof);
+		}
+
+		new ModRecipes().registerRecipes();
 	}
 
 	@SideOnly(Side.CLIENT)

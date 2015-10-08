@@ -4,7 +4,7 @@ import factorization.api.Charge;
 import factorization.api.Coord;
 import factorization.api.DeltaCoord;
 import factorization.api.IChargeConductor;
-import io.netty.buffer.ByteBuf;
+import factorization.shared.Core;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -118,9 +118,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 				// Valid multiblock, do work.
 				if(mode == Mode.INPUT) {
 					if(motion <= 0) {
-						int chargeNeeded = 8;
-						int depleted = this.charge.deplete(chargeNeeded);
-						if(depleted >= chargeNeeded) {
+						if(tryDeplete(8)) {
 							motion += 2;
 							if(motion >= 0) {
 								motion = 100;
@@ -144,9 +142,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 						return;
 					}
 					if(motion <= 0) {
-						int chargeNeeded = 8;
-						int depleted = this.charge.deplete(chargeNeeded);
-						if(depleted >= chargeNeeded) {
+						if(tryDeplete(8)) {
 							motion += 2;
 							if(motion >= 0) {
 								motion = 100;
@@ -159,13 +155,16 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 						// 46795,18272
 						//int chargeNeeded = (int) Math.round(Math.max(Math.exp(0.07129728093320252 * (((double) this.airAmount / 64000D) * 80D)), 8));
 						int chargeNeeded = (int) Math.round(Math.max(3.75 * (double) this.airAmount / 56000D * 80D, 8));
-						int depleted = this.charge.deplete(chargeNeeded);
-						if(depleted >= chargeNeeded) {
+						if(tryDeplete(chargeNeeded)) {
+							if(motion >= 100) {
+								click(false);
+							}
 							motion -= 2;
 							airAmount += 40; // 800 mB per second
 							if(motion <= 0) {
 								motion = -100;
 								pressuriseEntities();
+								click(true);
 							}
 							if(airAmount >= getAirRequired()) {
 								getOutputTank().setFluid(outputStack.copy());
@@ -175,6 +174,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 								if(motion > 0) {
 									motion = motion - 100;
 								}
+								this.worldObj.playSoundEffect(xCoord + 0.5F, yCoord - 0.5F, zCoord + 0.5F, "factumopus:air_leak", 0.5F, 0.5F);
 								//} else {
 								//airAmount += 800;
 							}
@@ -182,9 +182,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					}
 				} else if(mode == Mode.OUTPUT) {
 					if(motion <= 0) {
-						int chargeNeeded = 8;
-						int depleted = this.charge.deplete(chargeNeeded);
-						if(depleted >= chargeNeeded) {
+						if(tryDeplete(8)) {
 							motion += 2;
 							if(motion >= 0) {
 								motion = 100;
@@ -201,10 +199,27 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					mode = getOutputTank().getFluidAmount() > 0 ? Mode.OUTPUT : Mode.INPUT;
 				}
 				if(motion != oldMotion) {
-					sendNetworkUpdate();
+					this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 0, motion);
 				}
 			}
 			this.charge.update();
+		}
+	}
+
+	private void click(boolean open) {
+		worldObj.playSoundEffect((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D, "random.click", 0.1F, open ? 1.5F : 0.7F);
+	}
+
+	private boolean notEnoughCharge = false;
+
+	private boolean tryDeplete(int chargeNeeded) {
+		int depleted = this.charge.deplete(chargeNeeded);
+		if(depleted >= chargeNeeded) {
+			this.notEnoughCharge = false;
+			return true;
+		} else {
+			this.notEnoughCharge = true;
+			return false;
 		}
 	}
 
@@ -289,8 +304,11 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 		return this.motion;
 	}
 
-	public void onMultiblockDeconstructed() {
+	public void onMultiblockDeconstructed(int x, int y, int z) {
 		isValid = false;
+		if(this.worldObj != null && !this.worldObj.isRemote && this.airAmount > 0) {
+			this.worldObj.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, "factumopus:air_leak", 1F, 1F);
+		}
 	}
 
 	public boolean isValidMultiblock() {
@@ -380,15 +398,16 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 	}
 
 	@Override
-	public void readData(ByteBuf data) {
-		super.readData(data);
-		this.motion = data.readInt();
-	}
-
-	@Override
-	public void writeData(ByteBuf data) {
-		super.writeData(data);
-		data.writeInt(this.motion);
+	public boolean receiveClientEvent(int id, int val) {
+		switch(id) {
+			case 0: {
+				this.motion = val;
+				return true;
+			}
+			default: {
+				return super.receiveClientEvent(id, val);
+			}
+		}
 	}
 
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
@@ -433,13 +452,21 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 
 	@Override
 	public String getInfo() {
-		// TODO Make this
-		return "Valid: " + this.isValid
-			+ "\nFume Tank: " + this.fumeTank.getFluidAmount()
-			+ "\nEssence Tank: " + this.essenceTank.getFluidAmount()
-			+ "\nOutput Tank: " + this.outputTank.getFluidAmount()
-			+ "\nAir: " + this.airAmount
-			+ "\nMode: " + this.getMode();
+		if(!this.isValid) {
+			return "Not a valid structure!";
+		}
+		String result = "";
+		if(this.notEnoughCharge) {
+			result += "\nNot enough Charge!";
+		}
+		if(Core.dev_environ) {
+			result += "\n\u00a7oState: " + this.getMode()
+				+ "\n\u00a7oFume Tank: " + this.fumeTank.getFluidAmount()
+				+ "\n\u00a7oEssence Tank: " + this.essenceTank.getFluidAmount()
+				+ "\n\u00a7oOutput Tank: " + this.outputTank.getFluidAmount()
+				+ "\n\u00a7oAir: " + this.airAmount;
+		}
+		return result;
 	}
 
 	@Override

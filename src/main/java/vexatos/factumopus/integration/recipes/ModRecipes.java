@@ -8,11 +8,14 @@ import factorization.oreprocessing.TileEntityCrystallizer;
 import factorization.oreprocessing.TileEntitySlagFurnace;
 import factorization.shared.Core;
 import factorization.weird.TileEntityDayBarrel;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import vexatos.factumopus.FactumOpus;
+import vexatos.factumopus.reference.Mods;
 
 import java.util.Arrays;
 
@@ -21,7 +24,7 @@ import java.util.Arrays;
  */
 public class ModRecipes {
 
-	public static void registerRecipes() {
+	public void registerRecipes() {
 		GameRegistry.addShapelessRecipe(new ItemStack(FactumOpus.itemBowls, 1, 2),
 			new ItemStack(FactumOpus.itemMaterial, 1, 1), new ItemStack(FactumOpus.itemMaterial, 1, 1),
 			new ItemStack(FactumOpus.itemMaterial, 1, 1), new ItemStack(FactumOpus.itemMaterial, 1, 1),
@@ -54,9 +57,52 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(FactumOpus.clayeySand), "sand", Items.clay_ball));
 
 		registerFactorizationRecipes();
+		String tag = "fo:airSealant";
+		if(!OreDictionary.doesOreNameExist(tag)) {
+			tag = "slimeball";
+		}
+
+		registerRailcraftComressorRecipes(tag);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(FactumOpus.blockCompressorWall, 1, 0),
+			"plp", "ltl", "plp", 'p', tag, 't', "blockIron", 'l', Items.clay_ball));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(FactumOpus.blockCompressorValve, 1, 0),
+			"pip", "ltl", "pmp",
+			'p', Blocks.iron_bars,
+			't', FactumOpus.blockCompressorWall,
+			'l', "ingotIron",
+			'i', Blocks.heavy_weighted_pressure_plate,
+			'm', Core.registry.motor));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(FactumOpus.blockFumeCompressor, 1, 0),
+			"plp", "cmc", "wtw",
+			'p', tag,
+			't', FactumOpus.blockCompressorValve,
+			'l', FactumOpus.blockCompressorWall,
+			'w', "ingotLead",
+			'm', Core.registry.motor,
+			'c', Core.registry.insulated_coil));
 	}
 
-	public static void registerFactorizationRecipes() {
+	private void registerRailcraftComressorRecipes(String tag) {
+		ItemStack tankWall = GameRegistry.findItemStack(Mods.Railcraft, "machine.beta.tank.steel.wall", 1);
+		ItemStack tankValve = GameRegistry.findItemStack(Mods.Railcraft, "machine.beta.tank.steel.valve", 1);
+		if(tankWall != null) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(FactumOpus.blockCompressorWall, 1, 0),
+				"pip", "ptp", "pmp",
+				'p', tag,
+				't', tankWall,
+				'i', Blocks.heavy_weighted_pressure_plate,
+				'm', Items.clay_ball));
+		}
+		if(tankValve != null) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(FactumOpus.blockCompressorValve, 1, 0),
+				" p ", "ptp", "pmp",
+				'p', tag,
+				't', tankValve,
+				'm', Core.registry.motor));
+		}
+	}
+
+	public void registerFactorizationRecipes() {
 		CraftingManagerGeneric<TileEntityCrystallizer> crystallizerRecipes = CraftingManagerGeneric.get(TileEntityCrystallizer.class);
 		CraftingManagerGeneric<TileEntitySlagFurnace> slagFurnaceRecipes = CraftingManagerGeneric.get(TileEntitySlagFurnace.class);
 		CraftingManagerGeneric<TileEntityMixer> mixerRecipes = CraftingManagerGeneric.get(TileEntityMixer.class);
@@ -130,7 +176,7 @@ public class ModRecipes {
 			ItemStack barrel = TileEntityDayBarrel.makeBarrel(TileEntityDayBarrel.Type.NORMAL,
 				log, Core.registry.silver_block_item.copy());
 			TileEntityDayBarrel.barrel_items.add(1, barrel);
-			Core.registry.oreRecipe(barrel, "W-W", "W W", "WWW", 'W', log, '-', "blockSilver");
+			GameRegistry.addRecipe(new ShapedOreRecipe(barrel, "W-W", "W W", "WWW", 'W', log, '-', "blockSilver"));
 		}
 	}
 }

@@ -42,22 +42,26 @@ public abstract class TileCompressorBase extends TileEntityFactumOpus {
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
-		if(te != null) {
-			te.onMultiblockDeconstructed();
-		} else {
-			getMasterCoord().set(Coord.ZERO);
+		if(worldObj != null && !worldObj.isRemote) {
+			TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
+			if(te != null) {
+				te.onMultiblockDeconstructed(xCoord, yCoord, zCoord);
+			} else {
+				getMasterCoord().set(Coord.ZERO);
+			}
 		}
 	}
 
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
-		if(te != null) {
-			te.onMultiblockDeconstructed();
-		} else {
-			getMasterCoord().set(Coord.ZERO);
+		if(worldObj != null && !worldObj.isRemote) {
+			TileFumeCompressor te = getMasterCoord().getTE(TileFumeCompressor.class);
+			if(te != null) {
+				te.onMultiblockDeconstructed(xCoord, yCoord, zCoord);
+			} else {
+				getMasterCoord().set(Coord.ZERO);
+			}
 		}
 	}
 

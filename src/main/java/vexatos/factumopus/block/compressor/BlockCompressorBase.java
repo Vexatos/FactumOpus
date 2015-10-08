@@ -32,14 +32,20 @@ public abstract class BlockCompressorBase extends BlockFactumOpus {
 	public abstract TileEntity createTileEntity(World world, int metadata);
 
 	@SideOnly(Side.CLIENT)
-	private IIcon textureTop = null;
-	private String textureTopName;
+	protected IIcon textureTop = null;
+	@SideOnly(Side.CLIENT)
+	protected IIcon textureBottom = null;
+	protected String textureTopName;
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(textureTop != null && (side == 0 || side == 1)) {
-			return textureTop;
+		if(textureTop != null) {
+			if(side == 0) {
+				return textureBottom;
+			} else if(side == 1) {
+				return textureTop;
+			}
 		}
 		return super.getIcon(side, meta);
 	}
@@ -49,6 +55,7 @@ public abstract class BlockCompressorBase extends BlockFactumOpus {
 	public void registerBlockIcons(IIconRegister r) {
 		super.registerBlockIcons(r);
 		textureTop = r.registerIcon(textureTopName);
+		textureBottom = textureTop;
 	}
 
 	protected void setTopTextureName(String textureName) {
