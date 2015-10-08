@@ -32,9 +32,9 @@ public abstract class BlockCompressorBase extends BlockFactumOpus {
 	public abstract TileEntity createTileEntity(World world, int metadata);
 
 	@SideOnly(Side.CLIENT)
-	protected IIcon textureTop = null;
+	protected IIcon textureTop;
 	@SideOnly(Side.CLIENT)
-	protected IIcon textureBottom = null;
+	protected IIcon textureBottom;
 	protected String textureTopName;
 
 	@Override

@@ -1,6 +1,8 @@
 package vexatos.factumopus.client;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -20,6 +22,7 @@ import vexatos.factumopus.tile.compressor.TileFumeCompressor;
 /**
  * @author Vexatos
  */
+@SideOnly(Side.CLIENT)
 public class RenderFumeCompressor extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 	private final int renderID;
 	private static final Block renderBlock = new BlockFactumOpus(Material.iron);
