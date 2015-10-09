@@ -37,9 +37,11 @@ fluid.factumopus.voidfumes=Void Fumes
 fluid.factumopus.voidessence=Void Essence
 fluid.factumopus.voidgoo=Void Goo
 
-for.factumopus.bees.species.salty=Salty
-for.factumopus.bees.species.saline=Saline
-for.factumopus.flowers.sea=Sea
+factumopus.bees.species.salty=Salty
+factumopus.bees.species.salty.description=They search the rock around them, looking for salt. Noone knows why they do it, they don't seem to use it for anything.|Encyclopaedia Apiformum
+factumopus.bees.species.saline=Saline
+factumopus.bees.species.saline.description=Capable of gathering salt out of the water in the sea. How they do it has yet to be discovered.|Encyclopaedia Apiformum
+factumopus.flowers.sea=Sea
 
 item.factumopus.void_goo_glob.name=Small Glob of Void Goo
 item.factumopus.void_goo_glob.tip=It looks... strange.
