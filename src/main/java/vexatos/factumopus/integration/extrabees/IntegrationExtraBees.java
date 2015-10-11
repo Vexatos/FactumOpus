@@ -3,6 +3,7 @@ package vexatos.factumopus.integration.extrabees;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.core.EnumHumidity;
@@ -48,18 +49,20 @@ public class IntegrationExtraBees {
 	public void init() {
 		FactumOpus.log.info("Adding ExtraBees integration...");
 
-		sea = AlleleManager.alleleFactory.createFlowers(Mods.FactumOpus, "flowers", "sea", new FlowerProviderSea(), true);
+		FlowerProviderSea providerSea = new FlowerProviderSea();
+		sea = AlleleManager.alleleFactory.createFlowers(Mods.FactumOpus, "flowers", "sea", providerSea, true);
+		FlowerManager.flowerRegistry.registerAcceptableFlowerRule(providerSea, providerSea.getFlowerType());
 
 		speciesSalty = BeeManager.beeFactory.createSpecies("factumopus.speciesSalty", false, "Vexatos",
 			"factumopus.bees.species.salty", "factumopus.bees.species.salty.description",
 			AlleleManager.alleleRegistry.getClassification("extrabees.genus.rocky"), "salinarum", 0xF1F1F1, 0x999999)
 			.addProduct(new ItemStack(itemPartsForestry, 1, 0), 0.1F);
-		speciesSaline =BeeManager.beeFactory.createSpecies("factumopus.speciesSaline", false, "Vexatos",
+		speciesSaline = BeeManager.beeFactory.createSpecies("factumopus.speciesSaline", false, "Vexatos",
 			"factumopus.bees.species.saline", "factumopus.bees.species.saline.description",
 			AlleleManager.alleleRegistry.getClassification("extrabees.genus.rocky"), "salinis", 0xF1F1F1, 0x82DBFF)
 			.addProduct(new ItemStack(itemPartsForestry, 1, 0), 0.3F);
 		speciesSaline.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP).setHasEffect();
-		mutationSalty =  BeeManager.beeMutationFactory.createMutation(
+		mutationSalty = BeeManager.beeMutationFactory.createMutation(
 			(IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(speciesMineral),
 			(IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(speciesStone), getSaltyTemplate(), 10).requireResource(FactumOpus.pondBase, 0);
 		mutationSaline = BeeManager.beeMutationFactory.createMutation(

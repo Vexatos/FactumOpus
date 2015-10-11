@@ -64,7 +64,7 @@ import vexatos.factumopus.tile.compressor.TileFumeCompressor;
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
 	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);after:"
 		+ Mods.API.BuildCraftTransport + "@[4.1,);after:" + Mods.Botany
-		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[3.6.6,4)")
+		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[4.0.8,)")
 public class FactumOpus {
 
 	@Instance(Mods.FactumOpus)
