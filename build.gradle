@@ -52,6 +52,10 @@ repositories {
 		name = "BuildCraft"
 		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
 	}
+	ivy {
+		name = "Galacticraft"
+		artifactPattern "http://ci.micdoodle8.com/job/Galacticraft3-dev/${config.gc.build}/artifact/Forge/build/libs/[module]-1.7-[revision].${config.gc.build}.[ext]"
+	}
 }
 
 configurations {
@@ -78,6 +82,10 @@ dependencies {
 		exclude module: "industrialcraft-2"
 	}
 	compile name: "buildcraft", version: "${config.buildcraft.version}", classifier: "dev"
+
+	compile name: 'MicdoodleCore-Dev', version: config.gc.version, ext: 'jar'
+	compile name: 'GalacticraftCore-Dev', version: config.gc.version, ext: 'jar'
+	compile name: 'Galacticraft-Planets-Dev', version: config.gc.version, ext: 'jar'
 }
 
 minecraft {

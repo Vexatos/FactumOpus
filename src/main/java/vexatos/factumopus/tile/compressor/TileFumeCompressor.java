@@ -1,19 +1,24 @@
 package vexatos.factumopus.tile.compressor;
 
+import cpw.mods.fml.common.Optional;
 import factorization.api.Charge;
 import factorization.api.Coord;
 import factorization.api.DeltaCoord;
 import factorization.api.IChargeConductor;
 import factorization.shared.Core;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.api.world.OxygenHooks;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
+import vexatos.factumopus.reference.Mods;
 import vexatos.factumopus.tile.TileEntityFactumOpus;
 
 import java.util.ArrayList;
@@ -114,6 +119,13 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					}
 				}
 			} else {
+				if(hasNoAir()) {
+					this.noAirOnTop = true;
+					this.charge.update();
+					return;
+				} else if(noAirOnTop) {
+					noAirOnTop = false;
+				}
 				final int oldMotion = motion;
 				// Valid multiblock, do work.
 				if(mode == Mode.INPUT) {
@@ -204,6 +216,37 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 			}
 			this.charge.update();
 		}
+	}
+
+	private boolean hasNoAir() {
+		if(Mods.hasVersion(Mods.API.Galacticraft, "[1.1,)")) {
+			if(!hasAir_GC()) {
+				return false;
+			}
+		}
+		return worldObj.isAirBlock(xCoord, yCoord + 1, zCoord);
+	}
+
+	protected boolean noAirOnTop = false;
+	protected boolean gcAirLast = true;
+	protected boolean gcAirChecked = false;
+
+	@Optional.Method(modid = Mods.API.Galacticraft)
+	private boolean hasAir_GC() {
+		if(!gcAirChecked || worldObj.getTotalWorldTime() % 5 == 0) {
+			if(!gcAirChecked) {
+				gcAirChecked = true;
+			}
+			WorldProvider provider = worldObj.provider;
+			if(!(provider instanceof IGalacticraftWorldProvider)){
+				gcAirLast = true;
+				return true;
+			}
+			gcAirLast = ((IGalacticraftWorldProvider) provider).hasBreathableAtmosphere()
+				|| OxygenHooks.isAABBInBreathableAirBlock(worldObj,
+				AxisAlignedBB.getBoundingBox(xCoord + 0.1, yCoord + 0.5, zCoord + 0.1, xCoord + 0.9, yCoord + 1.5, zCoord + 0.9));
+		}
+		return gcAirLast;
 	}
 
 	private void click(boolean open) {
@@ -459,6 +502,9 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 		if(this.notEnoughCharge) {
 			result += "\nNot enough Charge!";
 		}
+		if(this.noAirOnTop) {
+			result += "\nNo access to air on top!";
+		}
 		if(Core.dev_environ) {
 			result += "\n\u00a7oState: " + this.getMode()
 				+ "\n\u00a7oFume Tank: " + this.fumeTank.getFluidAmount()
@@ -466,6 +512,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 				+ "\n\u00a7oOutput Tank: " + this.outputTank.getFluidAmount()
 				+ "\n\u00a7oAir: " + this.airAmount;
 		}
+
 		return result;
 	}
 
