@@ -7,8 +7,8 @@ death.attack.factumopus.acidDrinker=%1$s thought drinking pure acid was a good i
 death.attack.factumopus.acidDrinker.player=%1$s thought that, drinking pure acid, he'd win against %2$s
 death.attack.factumopus.sulfurTrioxide=%1$s melted Sulfur Trioxide and thus got melted by Sulfur Trioxide
 death.attack.factumopus.sulfurTrioxide.player=%1$s fought against %2$s but forgot the Sulfur Trioxide
-death.attack.factumopus.pressure=%s has been compressed successfully.
-death.attack.factumopus.pressure.player=
+death.attack.factumopus.pressure=%1$s has been compressed successfully.
+death.attack.factumopus.pressure.player=%1$s got attacked by %2$s and tried to hide in a Compression Chamber.
 
 tile.factumopus.clayey_sand.name=Clayey Sand
 tile.factumopus.clayey_sand.tip=Place it in a hot area and wait until it hardens.
