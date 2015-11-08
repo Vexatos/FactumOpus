@@ -1,6 +1,7 @@
 ==== 0.0.4 ====
 
   * FIXED: The Air Compressor actually requires air now.
+  * FIXED: Disabled BuildCraft integration when old API version is present instead of the mod not working with old versions at all.
 
 ==== 0.0.3 ====
 
