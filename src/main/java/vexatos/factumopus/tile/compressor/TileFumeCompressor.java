@@ -119,7 +119,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					}
 				}
 			} else {
-				if(hasNoAir()) {
+				if(!hasAir()) {
 					this.noAirOnTop = true;
 					this.charge.update();
 					return;
@@ -218,7 +218,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 		}
 	}
 
-	private boolean hasNoAir() {
+	private boolean hasAir() {
 		if(Mods.hasVersion(Mods.API.Galacticraft, "[1.1,)")) {
 			if(!hasAir_GC()) {
 				return false;

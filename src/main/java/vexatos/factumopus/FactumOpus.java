@@ -63,8 +63,7 @@ import vexatos.factumopus.tile.compressor.TileFumeCompressor;
  */
 @Mod(modid = Mods.FactumOpus, name = Mods.FactumOpus_NAME, version = "@VERSION@",
 	dependencies = "required-after:" + Mods.Factorization + "@[0.8.89,);after:"
-		+ Mods.API.BuildCraftTransport + "@[4.1,);after:" + Mods.Botany
-		+ "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[4.0.8,)")
+		+ Mods.Botany + "@[2.0-pre14,);after:" + Mods.ExtraBees + "@[2.0,);after:" + Mods.Forestry + "@[4.0.8,)")
 public class FactumOpus {
 
 	@Instance(Mods.FactumOpus)
@@ -259,7 +258,7 @@ public class FactumOpus {
 			FMLInterModComms.sendMessage(Mods.Botany, "add-acid-fertiliser-1", new ItemStack(itemSalts, 1, 8));
 			FMLInterModComms.sendMessage(Mods.Botany, "add-nutrient-fertiliser-1", new ItemStack(itemSalts, 1, 9));
 		}
-		if(Mods.API.hasAPI(Mods.API.BuildCraftTransport)) {
+		if(Mods.hasVersion(Mods.API.BuildCraftTransport, "[4.1,)")) {
 			registerStripesHandlers();
 		}
 
