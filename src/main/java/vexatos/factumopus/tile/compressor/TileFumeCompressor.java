@@ -211,7 +211,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 					mode = getOutputTank().getFluidAmount() > 0 ? Mode.OUTPUT : Mode.INPUT;
 				}
 				if(motion != oldMotion) {
-					this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 0, motion);
+					this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 0, motion + 100);
 				}
 			}
 			this.charge.update();
@@ -444,7 +444,7 @@ public class TileFumeCompressor extends TileEntityFactumOpus implements IChargeC
 	public boolean receiveClientEvent(int id, int val) {
 		switch(id) {
 			case 0: {
-				this.motion = val;
+				this.motion = val - 100;
 				return true;
 			}
 			default: {
