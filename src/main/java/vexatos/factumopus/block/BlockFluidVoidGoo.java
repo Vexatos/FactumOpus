@@ -166,10 +166,12 @@ public class BlockFluidVoidGoo extends BlockFluidLikeWater {
 			FoodStats foodStats = player.getFoodStats();
 			if(foodStats != null && world.getTotalWorldTime() % 8 == 0) {
 				if(foodStats.getSaturationLevel() > 0.0F) {
-					foodStats.setFoodSaturationLevel(Math.max(foodStats.getSaturationLevel() - 1.0F, 0));
+					//foodStats.setFoodSaturationLevel(Math.max(foodStats.getSaturationLevel() - 1.0F, 0));
+					foodStats.addStats(1, -1);
 					return;
 				} else if(foodStats.getFoodLevel() > 1) {
-					foodStats.setFoodLevel(Math.max(foodStats.getFoodLevel() - 1, 1));
+					foodStats.addStats(-1, 0);
+					//foodStats.setFoodLevel(Math.max(foodStats.getFoodLevel() - 1, 1));
 					return;
 				}
 			}
