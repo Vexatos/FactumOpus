@@ -1,3 +1,9 @@
+==== 0.0.5 ====
+
+  * FIXED: Various crashes related to client-side-only methods.
+  * FIXED: Crystallizer recipes not working like they should
+  * FIXED: NEI pages behaving strangely
+
 ==== 0.0.4 ====
 
   * FIXED: The Air Compressor actually requires air now.

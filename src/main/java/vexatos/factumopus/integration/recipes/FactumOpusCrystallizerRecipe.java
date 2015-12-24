@@ -80,7 +80,7 @@ public class FactumOpusCrystallizerRecipe implements IVexatiousCrafting<TileEnti
 		}
 		for(ItemStack otherOutput : this.otherOutputs) {
 			if(otherOutput != null) {
-				insert(crys.inputs, otherOutput);
+				insert(crys.inputs, otherOutput.copy());
 			}
 		}
 		crys.markDirty();

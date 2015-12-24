@@ -150,9 +150,9 @@ public class RecipeFOCrystallizer extends TemplateRecipeHandler {
 		public List<PositionedStack> getOtherStacks() {
 			ArrayList<PositionedStack> ret = new ArrayList<PositionedStack>();
 			if(cycleticks % 160 >= 80) {
-				ret.addAll(getCycledIngredients(cycleticks % 20, outputStacks));
+				ret.addAll(getCycledIngredients(cycleticks / 20, outputStacks));
 			} else {
-				ret.addAll(getCycledIngredients(cycleticks % 20, inputStacks));
+				ret.addAll(getCycledIngredients(cycleticks / 20, inputStacks));
 			}
 			ret.add(new PositionedStack(Core.registry.heater_item, 0, 75));
 			return ret;

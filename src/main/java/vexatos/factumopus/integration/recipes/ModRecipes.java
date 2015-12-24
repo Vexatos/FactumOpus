@@ -148,6 +148,12 @@ public class ModRecipes {
 			new ItemStack(FactumOpus.itemSalts, 1, 5),
 			Arrays.asList(new ItemStack(FactumOpus.itemAcidBottles, 1, 1), new ItemStack(Items.bowl, 1, 0)),
 			Core.registry.sulfuric_acid.copy()));
+		crystallizerRecipes.add(new FactumOpusCrystallizerRecipe(
+			Arrays.asList(new OreDictItemStack("ingotCopper", 1),
+				new OreDictItemStack(new ItemStack(FactumOpus.itemBowls, 1, 2))),
+			new ItemStack(FactumOpus.itemSalts, 1, 5),
+			Arrays.asList(new ItemStack(FactumOpus.itemAcidBottles, 1, 1), new ItemStack(Items.bowl, 1, 0)),
+			Core.registry.sulfuric_acid.copy()));
 		mixerRecipes.add(new FactumOpusMixerRecipe(
 			Arrays.asList(
 				new OreDictItemStack(new ItemStack(FactumOpus.itemAcidBottles, 3, 1)),

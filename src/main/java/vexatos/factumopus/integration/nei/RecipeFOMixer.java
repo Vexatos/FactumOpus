@@ -149,8 +149,8 @@ public class RecipeFOMixer extends TemplateRecipeHandler {
 		@Override
 		public List<PositionedStack> getOtherStacks() {
 			ArrayList<PositionedStack> ret = new ArrayList<PositionedStack>();
-			ret.addAll(getCycledIngredients(cycleticks % 20, inputStacks));
-			ret.addAll(getCycledIngredients(cycleticks % 20, outputStacks));
+			ret.addAll(getCycledIngredients(cycleticks / 20, inputStacks));
+			ret.addAll(getCycledIngredients(cycleticks / 20, outputStacks));
 			return ret;
 		}
 	}
