@@ -5,6 +5,7 @@ import factorization.api.crafting.CraftingManagerGeneric;
 import factorization.crafting.TileEntityMixer;
 import factorization.oreprocessing.ItemOreProcessing.OreType;
 import factorization.oreprocessing.TileEntityCrystallizer;
+import factorization.oreprocessing.TileEntityGrinder;
 import factorization.oreprocessing.TileEntitySlagFurnace;
 import factorization.shared.Core;
 import factorization.weird.TileEntityDayBarrel;
@@ -141,6 +142,7 @@ public class ModRecipes {
 				new ItemStack(FactumOpus.itemSalts, 1, 0),
 				Arrays.asList(new ItemStack(FactumOpus.itemAcidBottles, 1, 0), new ItemStack(FactumOpus.itemSalts, 3, 5)),
 				Core.registry.sulfuric_acid.copy()));
+			TileEntityGrinder.addRecipe("oreSaltpeter", OreDictionary.getOres("dustSaltpeter").get(0), 1.5f);
 		}
 		crystallizerRecipes.add(new FactumOpusCrystallizerRecipe(
 			Arrays.asList(new OreDictItemStack(Core.registry.sulfuric_acid.copy()),
