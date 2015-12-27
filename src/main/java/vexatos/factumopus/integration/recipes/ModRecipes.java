@@ -172,6 +172,7 @@ public class ModRecipes {
 				new ItemStack(FactumOpus.itemAcidBottles, 1, 2),
 				new ItemStack(Items.bowl, 1, 0)),
 			Core.registry.aqua_regia.copy()));
+		TileEntityGrinder.addRecipe(FactumOpus.blockVoidGooSolid, new ItemStack(FactumOpus.itemMaterial, 1, 0), 14.5f);
 		{
 			//TileEntityDayBarrel.makeRecipe(new ItemStack(FactumOpus.blockVoidGooSolid, 1, 0), "blockSilver");
 			ItemStack log = new ItemStack(FactumOpus.blockVoidGooSolid, 1, 0);
