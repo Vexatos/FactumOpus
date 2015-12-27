@@ -151,7 +151,7 @@ public class BlockFluidVoidGoo extends BlockFluidLikeWater {
 		entity.motionX = Math.max(-0.05, Math.min(0.05, entity.motionX * 0.05));
 		entity.motionY -= 0.05;
 		entity.motionZ = Math.max(-0.05, Math.min(0.05, entity.motionZ * 0.05));
-		entity.stepHeight = 0.0F;
+		//entity.stepHeight = 0.0F;
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(player.capabilities != null) {
